@@ -20,6 +20,7 @@ private:
 	bool archivoVacio();
 	void saveBitMap();
 	void openBitMap();
+
 public:
 	bool del(Registro &);
 	int edit(Registro &);
@@ -30,7 +31,4 @@ public:
 	ArchRRLF(string,unsigned);
 	~ArchRRLF();
 };
-
-
-
 #endif /* SRC_PHYSICAL_HEADERS_ARCHRRLF_H_ */
