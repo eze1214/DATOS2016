@@ -1,6 +1,28 @@
 #include "bloque.h"
 #include <string>
-void Bloque::add(Registro & registro){
+
+
+void Bloque::edit(const Registro & registro, unsigned numeroRegistro){
+		registros[numeroRegistro] = registro;
+}
+
+
+bool Bloque::del(const unsigned & numRegistro){
+	bool exito = (numRegistro<=registros.size());	
+	registros.erase(registros.begin()+numRegistro);
+	return exito;
+}
+
+
+Registro Bloque::getRegistro(unsigned int numeroRegistro){
+	return registros[numeroRegistro];
+}
+
+unsigned Bloque::cantRegistros(){
+		return registros.size();
+}
+
+void Bloque::add(const Registro & registro){
 		registros.push_back(registro);
 }
 

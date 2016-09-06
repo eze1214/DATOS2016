@@ -13,13 +13,26 @@ private:
 	std::vector<Registro> registros;
 	std::vector<Registro>::iterator it;
 public:
-	void add(Registro & registro);
 	
+	/*delete: Elimina un registro segun el numeroRegistro que es el numero de inserción 
+	 * seguón el orden que fue ingresado devuelve false si no existe;
+	 */
+	bool del(const unsigned & numeroRegistro);
+	void edit(const Registro & registro, unsigned numeroRegistro); 
+	void add(const Registro & registro);
+	
+	/*Es responsabilidad de quien utiliza la clase colocar un numero de registro 
+	 * valido. Se puede obtener la cantidad de registros con cantRegistro
+	 * 
+	 */
+	Registro getRegistro(unsigned numeroRegistro);
 	/*Devuelve un string con la información empaquetada devolviendo la cantidad
 	 * de bytes.
 	 */
 	unsigned serializar(std::string & buffer);
 	unsigned size();
+	
+	unsigned cantRegistros();
 };
 
 #endif // BLOQUE_H
