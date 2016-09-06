@@ -15,7 +15,7 @@ private:
 public:
 	
 	/*delete: Elimina un registro segun el numeroRegistro que es el numero de inserción 
-	 * seguón el orden que fue ingresado devuelve false si no existe;
+	 * segun el orden que fue ingresado devuelve false si no existe;
 	 */
 	bool del(const unsigned & numeroRegistro);
 	void edit(const Registro & registro, unsigned numeroRegistro); 
