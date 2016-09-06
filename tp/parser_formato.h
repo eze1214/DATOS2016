@@ -9,7 +9,6 @@
 const unsigned SIZE_CADENA_CORTA = 256;
 const unsigned SIZE_FECHA_CORTA = 8;
 const unsigned SIZE_FECHA_LARGA = 14; 
-struct Formato{
 
   enum TIPO_FORMATOS{
    ENTERO=0,
@@ -18,6 +17,8 @@ struct Formato{
    FECHA_CORTA,
    FECHA_LARGA
  };
+ 
+struct Formato{
  
  TIPO_FORMATOS tipo;
  unsigned longitud;

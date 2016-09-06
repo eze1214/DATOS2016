@@ -6,5 +6,8 @@ Name=GCC
 Path=gcc
 Type=GCC
 
+[Project]
+VersionControlSupport=kdevgit
+
 [SourceFileTemplates]
 LastUsedTemplate=/home/ezequiel/.kde/share/apps/kdevfiletemplates/template_descriptions/cpp_basic.desktop
