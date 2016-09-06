@@ -55,6 +55,8 @@ public:
 	 */
 	unsigned serializar(char * buffer,unsigned size);
 	
+	unsigned int serializar(std::string & buffer);
+	
 	/*Hidratar: buffer: origen de datos, size: tamaño del origen de datos.
 	 */
 	void hidratar(char * buffer,unsigned size); 

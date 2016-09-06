@@ -49,6 +49,17 @@ unsigned int Registro::serializar(char* buffer, unsigned int size){
 	return pos;
 }
 
+unsigned int Registro::serializar(std::string & buffer){
+	it_campos = campos.begin();
+	buffer.clear();
+	unsigned pos = 0;
+	for(;it_campos!= campos.end();++it_campos){
+		buffer.append((*it_campos).value);
+		pos += (*it_campos).formato.longitud;
+	}
+	return pos;
+}
+
 unsigned Registro::grabar(char * buffer,unsigned size,unsigned num){
 	unsigned pos = 0;
 		switch((campos[num]).formato.tipo){
@@ -86,5 +97,10 @@ void Registro::hidratar(char* buffer, unsigned int size){
  
 	
 	unsigned Registro::size(){
-			return campos.size();
+			unsigned contador = 0;
+			it_campos = campos.begin();
+			for (; it_campos!= campos.end();++it_campos){
+					contador+=(*it_campos).formato.longitud;
+			}
+			return contador;
 	}

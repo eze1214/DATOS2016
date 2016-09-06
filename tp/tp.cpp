@@ -25,5 +25,6 @@ int main(int argc, char * argv[]){
  char buffer2[512];
  memset(buffer2,0,512);
  registro2.serializar(buffer2,512);
+	std::cout<<"Longitud "<<registro.size();
  return 0;
 }
