@@ -17,7 +17,7 @@ extension = cpp
 # descomentar la línea (quitarle el '#' del principio).
 # NOTA: No poner cabeceras (.h).
 fuentes = test.cpp ../registro.cpp ../parser_formato.cpp ../bloque.cpp \
-				../ByteMap.cpp 
+				../bytemap.cpp 
 
 # Si usa funciones de math.h, descomentar (quitar el '#' a) la siguiente línea.
 #math = si
@@ -39,7 +39,7 @@ fuentes = test.cpp ../registro.cpp ../parser_formato.cpp ../bloque.cpp \
 ###########################
 
 # Opciones para el compilador C/C++ para tratamiento de errores y warnings.
-CFLAGS = -Wall -Werror -pedantic -pedantic-errors -g -pthread
+CFLAGS = -Wall -pedantic -pedantic-errors -g -pthread
 
 # Para optimizar el binario resultante lo mejor posible
 CFLAGS += -O3 -DNDEBUG

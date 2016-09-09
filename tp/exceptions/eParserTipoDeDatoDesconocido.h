@@ -1,8 +1,8 @@
 /*
  * eParserTipoDeDatoDesconocido.h
  *
- *  Created on: 16/10/2015
- *      Author: cristian
+ *  
+ *  
  */
 
 #ifndef EPARSERTIPODEDATODESCONOCIDO_H_

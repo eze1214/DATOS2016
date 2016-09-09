@@ -1,8 +1,8 @@
 /*
  * eBitMapPosFueraRango.h
  *
- *  Created on: 08/10/2015
- *      Author: cristian
+ *
+ *
  */
 
 #ifndef EBITMAPPOSFUERARANGO_H_

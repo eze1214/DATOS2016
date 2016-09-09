@@ -1,8 +1,8 @@
 /*
  * eByteMapCantBytesMalEspecificada.h
  *
- *  Created on: 08/10/2015
- *      Author: cristian
+ *  
+ *  
  */
 
 #ifndef EBYTEMAPCANTBYTESMALESPECIFICADA_H_

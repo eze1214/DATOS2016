@@ -3,7 +3,7 @@
 #include "../bloque.h"
 #include <string>
 #include <cstring>
-#include "../headers/ByteMap.h"
+#include "../bytemap.h"
 
 TEST(Registro, create) {
 	Registro registro ("i1,i2,i4");
@@ -146,7 +146,96 @@ TEST (Bloque, serializar){
   
   EXPECT_EQ(*cadena.c_str(),*buffer1);
 }
+
+TEST(bytemap, EspacioBloque2){
+	ByteMap bytemap(256);
+	bytemap.add(1,254);
+	EXPECT_EQ(bytemap.getBloque(254),2);
+}
+
+TEST(bytmap, espacioUnBloque){
+    ByteMap bytemap(256);
+    std::cout<<bytemap.getBloque(100)<<std::endl;
+    EXPECT_EQ(bytemap.getBloque(100),1);
+}
+
+TEST(bytemap, masGrande){
+ ByteMap bytemap(2048);
+ EXPECT_EQ(bytemap.getBloque(1000),1);
+}
+
+TEST(bytemap,del){
+	ByteMap bytemap(256);
+	bytemap.add(1,254);
+	bytemap.del(1,254);
+	EXPECT_EQ(bytemap.getBloque(254),1);
+}
+
+TEST(bytemap,delJusto){
+    ByteMap bytemap(256);
+    bytemap.add(1,256);
+    bytemap.del(1,256);
+    EXPECT_EQ(bytemap.getBloque(256),1);
+}
+
+TEST(bytemap,addJusto){
+   ByteMap bytemap(256);
+   EXPECT_EQ(bytemap.getBloque(256),1);
+}
+
+TEST(bytemap,ultimoBloque){
+   ByteMap bytemap(256);
+   for (int i = 1;i<256;i++){
+    bytemap.add(i,256);
+  }
+  EXPECT_EQ(bytemap.getBloque(256),256);
+}
+
+TEST(bytemap,sinEspacio){
+   ByteMap bytemap(256);
+   for(int i = 1 ; i<=256;i++)
+    bytemap.add(i,200);
+  EXPECT_EQ(bytemap.getBloque(200),0);
+}
+
+TEST(bytemap,serializarVacio){
+  ByteMap bytemap(256);
+  std::string serializado;
+  serializado = bytemap.serializar();
+  std::string comparar;
+  for(int i = 1; i<=256;i++)
+    comparar.push_back(0);
+  EXPECT_EQ(comparar,serializado);
+}
+
+TEST(bytemap,serializarUnoLleno){
+  ByteMap bytemap(256);
+  std::string serializado;
+  bytemap.add(1,256);
+  serializado = bytemap.serializar();
+  std::string comparar;
+  unsigned char lleno = 255;
+  comparar.push_back(lleno);
+  for(int i = 2; i<=256;i++)
+    comparar.push_back(0);
+  EXPECT_EQ(comparar,serializado);
+}
+
+TEST(bytemap,serializarTodoLleno){
+  ByteMap bytemap(256);
+  std::string serializado;
+  for ( int i = 1; i <=256; i++)
+    bytemap.add(i,256);
+  serializado = bytemap.serializar();
+  std::string comparar;
+  unsigned char lleno = 255;
+  for(int i = 1; i<=256;i++)
+    comparar.push_back(lleno);
+  EXPECT_EQ(comparar,serializado);
+}
+
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest( &argc, argv );
     return RUN_ALL_TESTS();
 }
+

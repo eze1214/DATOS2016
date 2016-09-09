@@ -1,8 +1,7 @@
 /*
  * eBitMapCadenaNoRespetaTamanio.h
  *
- *  Created on: 08/10/2015
- *      Author: cristian
+ *    
  */
 
 #ifndef EBITMAPCADENANORESPETATAMANIO_H_
