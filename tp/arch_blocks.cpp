@@ -5,7 +5,7 @@
  *      Author: ezequiel
  */
 
-#include "./headers/ArchBlocks.h"
+#include "arch_bloks.h"
 
 #include <stdio.h>
 #include <math.h>

@@ -24,34 +24,41 @@ ByteMap::ByteMap(unsigned sizeBloque){
   }
   
   void ByteMap::add(unsigned numero,unsigned tam){
-      unsigned char tamFinal = convertir(tam);
+      unsigned char tamFinal;
+			convertir(tam,tamFinal);
       bytes[numero] += tamFinal;
   }
   void ByteMap::del(unsigned numero,unsigned tam){
-    unsigned char tamFinal = convertir(tam);
+    unsigned char tamFinal;
+		convertir(tam,tamFinal);
     bytes[numero] -= tamFinal; 
   }
   
   unsigned ByteMap::getBloque(unsigned tam){
     bool encontro = false;
-    unsigned char tamFinal = convertir(tam);
-    unsigned i = 1;
-    while( (i <= sizeBloque) && !encontro){
-      unsigned char espacioLibre = MAX_CHAR - bytes[i];
-      if (tamFinal <= espacioLibre){ 
-	encontro = true;
-      } else
-	i++;
-    }
-    if (encontro) return i;
-    else
-    return 0;
-  }
+    unsigned char tamFinal;
+		if(convertir(tam,tamFinal)){
+			unsigned i = 1;
+			while( (i <= sizeBloque) && !encontro){
+				unsigned char espacioLibre = MAX_CHAR - bytes[i];
+				if (tamFinal <= espacioLibre){ 
+					encontro = true;
+				} else
+					i++;
+			}
+			if (encontro) 
+				return i;
+			else
+			return 0;}
+  return 0;}
   
-  unsigned char ByteMap::convertir(unsigned tam){
+  bool ByteMap::convertir(unsigned tam, unsigned char & tamFinal){
     unsigned char devolver;
-    if (tam >= sizeBloque) devolver = sizeBloque -1;
-    else
-    devolver = floor(tam * MAX_CHAR / (sizeBloque-1));
-    return devolver; 
+    if (tam == sizeBloque) devolver = sizeBloque -1;
+    else if (tam > sizeBloque) {
+			return false;
+		}else
+			devolver = floor(tam * MAX_CHAR / (sizeBloque-1));
+    tamFinal = devolver;
+		return true;
   }

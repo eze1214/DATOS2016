@@ -153,7 +153,7 @@ TEST(bytemap, EspacioBloque2){
 	EXPECT_EQ(bytemap.getBloque(254),2);
 }
 
-TEST(bytmap, espacioUnBloque){
+TEST(bytemap, espacioUnBloque){
     ByteMap bytemap(256);
     std::cout<<bytemap.getBloque(100)<<std::endl;
     EXPECT_EQ(bytemap.getBloque(100),1);
@@ -234,6 +234,10 @@ TEST(bytemap,serializarTodoLleno){
   EXPECT_EQ(comparar,serializado);
 }
 
+TEST(bytemap,registroExcedeBloque){
+		ByteMap bytemap(256);
+		EXPECT_EQ(bytemap.getBloque(2000),0);
+}
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest( &argc, argv );
     return RUN_ALL_TESTS();

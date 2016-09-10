@@ -26,8 +26,11 @@ private:
    * la transformación la hace tomando como parámetro que el 
    * valor máximo de bloque puede tener que es especificado en el 
    * constructor
+	 * Devuelve true siempre que haya exito.
+	 * falsa cuando no hay exito, es decir que el tamaño ingresado excesa a 
+	 * el tamaño del bloque
    */
-  unsigned char convertir(unsigned tam);
+  bool convertir(unsigned tam,unsigned char & );
 
 public:
   
