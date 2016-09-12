@@ -20,6 +20,10 @@ Registro::Registro(const std::string & formato){
 		if (campo.formato.tipo != CADENA_VARIABLE){
 				campo.value.insert(0,value,campos[numCampo].formato.longitud);
 				len = campos[numCampo].formato.longitud;
+		}if (campo.formato.tipo == CADENA_FIJA){
+			unsigned prefijo= size;
+			campos[numCampo].longitud = prefijo;
+			campo.value.insert(0,value,campos[numCampo].formato.longitud);
 		}
 		else{
 			while(len < size){
