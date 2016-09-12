@@ -9,19 +9,25 @@
 #include "registro.h"
 #include "arch_blocks.h"
 int main(int argc, char * argv[]){
-  ArchBlockRRLV archivo("prueba.bin",512,"i2,i2");
-	Registro registro("i2,i2");
+  ArchBlockRRLV archivo("prueba.bin",512,"i2,i2,d,dt");
+	Registro registro("i2,i2,d,dt");
 	short a = 20;
 	short b = 5;
+	char fecha [] = "19901214";
+	char fechaLarga [] = "19901214-23-12-23";
 	std::string buffer;
 	registro.writeCampo((char*)&a,sizeof(short),0);
 	registro.writeCampo((char*)&b,sizeof(short),1);
+	registro.writeCampo(fecha,sizeof(fecha),2);
+	registro.writeCampo(fechaLarga,sizeof(fechaLarga),3);
 	Bloque bloque;
 	bloque.add(registro);
 	archivo.insert(bloque);
-	ArchBlocks archivo2("prueba.bin");
-	Bloque bloque2 = archivo.getBloque(1);
+	ArchBlockRRLV archivo2("prueba.bin");
+	Bloque bloque2 = archivo2.getBloque(1);
 	Registro registro1 = bloque2.getRegistro(0);
-	Registro registro2 = bloque2.getRegistro(1);
+	registro.print();
+	std::cout<<std::endl;
+	registro1.print();
 	return 0;
 }

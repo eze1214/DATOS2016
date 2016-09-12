@@ -45,11 +45,14 @@ public:
 	
 	ArchBlocks(string,int);
 	virtual ~ArchBlocks();
+	
 	bool existeBloque(int numeroBloque);
 	void leerBloque(char* destino,int numeroBloque);
 	int getCantidadBloques();
 	char * getDatosBloque();
 	void grabarBloque(char *bloque);
 	void grabarBloque(const char *bloque,unsigned int numeroDeBloque);
+	unsigned short getTamBlock();
+	std::string getFormato();
 };
 #endif /* MANEJADORARCHIVOS_H_ */

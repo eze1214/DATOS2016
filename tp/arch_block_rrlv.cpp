@@ -1,12 +1,25 @@
 #include "arch_block_rrlv.h"
 #include <string>
+#include <iostream>
+#include <cstring>
 #define offset 32
 
 ArchBlockRRLV::ArchBlockRRLV(std::string  nombre, unsigned short  tamBlock, std::string  formato):	archBlocks(nombre,tamBlock,formato),
-											byteMap(tamBlock),
-											configuracion(formato)
+											byteMap(tamBlock)
 										{}
 
+ArchBlockRRLV::ArchBlockRRLV(std::string nombre):archBlocks(nombre){
+	unsigned short tamBlock = archBlocks.getTamBlock();
+	byteMap.setTamBlock(tamBlock);
+	char * buffer = new char[tamBlock];
+	memset(buffer,0,tamBlock);
+	archBlocks.leerBloque(buffer,0);
+	std::string buffer2;
+	buffer2.insert(0,buffer,tamBlock);
+	byteMap.hidratar(buffer2);
+	delete [] buffer;
+}
+	
 void ArchBlockRRLV::saveByteMap(){
 	std::string serializado = byteMap.serializar();
 	archBlocks.grabarBloque(serializado.c_str(),0);
@@ -50,7 +63,17 @@ bool ArchBlockRRLV::insert(Bloque & bloque){
 	 * porque grabar bloque funcionar con char *
 	 */
 	Bloque ArchBlockRRLV::getBloque(unsigned short numBlock){
-		char buffer[numBlock];
+		unsigned short tamBlock = archBlocks.getTamBlock();
+		char * buffer= new char[tamBlock];
 		archBlocks.leerBloque(buffer,numBlock);
+		unsigned pos=0;
 		Bloque bloque;
+		std::cout<<"Formato "<<archBlocks.getFormato()<<std::endl;
+		while (pos < tamBlock){
+				Registro registro(archBlocks.getFormato());
+				pos+=registro.hidratar(buffer+pos,tamBlock-pos);
+				bloque.add(registro);
+		}
+		delete [] buffer;
+		return bloque;
 	}

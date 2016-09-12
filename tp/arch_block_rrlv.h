@@ -15,9 +15,11 @@ class ArchBlockRRLV{
 private:
 	ArchBlocks archBlocks;
 	ByteMap byteMap;
-	Registro configuracion;//Va a guardar el tamaño del bloque y el formato
 	void saveByteMap();
 public:
+	//Constructor para abrir un archivo
+	ArchBlockRRLV(std::string nombre);
+	//Constructor para crear un archivo
 	ArchBlockRRLV(std::string  nombre, unsigned short tamBlock,
 							  std::string  formato);
 	
@@ -29,7 +31,7 @@ public:
 	 */
 	bool insert(Bloque & bloque, unsigned numBlock);
 	void del(unsigned numBlock);
-	Bloque getBloque(unsigned numBlock);
+	Bloque getBloque(unsigned short numBlock);
 };
 
 #endif // ARCHBLOCKRRLV_H

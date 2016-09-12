@@ -47,6 +47,9 @@ public:
    */
   ByteMap(unsigned sizeBloque);
   
+	ByteMap(){}
+	
+	void setTamBlock(unsigned sizeBloque);
   /*Devuelve un string que tiene encapsulado el 
    * mapa de bytes listo para ser guardado a disco
    */

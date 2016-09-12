@@ -85,7 +85,7 @@ unsigned Registro::grabar(char * buffer,unsigned size,unsigned num){
 		return pos;
 }
 
-void Registro::hidratar(char* buffer, unsigned int size){
+unsigned Registro::hidratar(char* buffer, unsigned int size){
 	unsigned numCampo = 0;
 	unsigned pos = 0;
 	it_campos = campos.begin();
@@ -93,6 +93,7 @@ void Registro::hidratar(char* buffer, unsigned int size){
 		pos += grabar(buffer+pos,size,numCampo);
 		numCampo++;
 	}
+	return pos;
 }
  
 	
@@ -104,3 +105,44 @@ void Registro::hidratar(char* buffer, unsigned int size){
 			}
 			return contador;
 	}
+	
+void Registro::print(){
+	it_campos = campos.begin();
+	for (; it_campos!= campos.end();++it_campos){
+						switch((*it_campos).formato.tipo){
+							case ENTERO:
+								switch ((*it_campos).formato.longitud){
+									case 1:{
+										char variable;
+										memcpy(&variable,(*it_campos).value.c_str(),sizeof(char));
+										std::cout<<"Value: "<<variable<<std::endl;}
+										break;
+									case 2:{
+										short variable;
+										memcpy((char*)&variable,(*it_campos).value.c_str(),sizeof(short));
+										std::cout<<"Value: "<<variable<<std::endl;}
+										break;
+									case 4:{
+										int variable;
+										memcpy((char*)&variable,(*it_campos).value.c_str(),sizeof(int));
+										std::cout<<"Value: "<<variable<<std::endl;}
+										break;
+									case 8:{
+										long long variable;
+										memcpy((char*)&variable,(*it_campos).value.c_str(),sizeof(long long));
+										std::cout<<"Value: "<<variable<<std::endl;}
+										break;
+									default: std::cout<<"Registro no imprimible"<<std::endl;
+								}
+								break;
+							case CADENA_FIJA:
+							case CADENA_VARIABLE:
+							case FECHA_CORTA:
+							case FECHA_LARGA:
+								std::cout<<"Value: "<<(*it_campos).value<<std::endl;
+							break;
+							default:
+								std::cout<<"Formato desconocido"<<std::endl;
+						}
+			}
+}

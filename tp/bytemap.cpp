@@ -2,11 +2,15 @@
 #include <cmath>
 #include <iostream>
 #define MAX_CHAR 255.
-ByteMap::ByteMap(unsigned sizeBloque){
-  this->sizeBloque = sizeBloque;
+
+void ByteMap::setTamBlock(unsigned sizeBloque){
+ this->sizeBloque = sizeBloque;
   for(unsigned i = 0; i<=sizeBloque; i++){
     bytes.push_back(0);
-  }
+  }	
+}
+ByteMap::ByteMap(unsigned sizeBloque){
+ setTamBlock(sizeBloque);
 }
 
   std::string ByteMap::serializar(){
@@ -19,7 +23,7 @@ ByteMap::ByteMap(unsigned sizeBloque){
   
   void ByteMap::hidratar (std::string buffer){
    for (unsigned i = 1; i <= sizeBloque; i++){
-      bytes[i] = buffer.at(i-1);
+				bytes[i] = buffer.at(i-1);
    }
   }
   

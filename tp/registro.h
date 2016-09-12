@@ -38,7 +38,7 @@ public:
 	 * pero sin valores deben ser insertados con writeCampo.
 	 */
 	Registro(const std::string & formato);
-	
+
 	/*Escribe un valor en el campo destino especificado por numCampo
 	 *en el caso de sD debe contener al final el caracter \0. Devuelve
 	 * la cantidad de bytes escritos.
@@ -59,9 +59,11 @@ public:
 	
 	/*Hidratar: buffer: origen de datos, size: tamaño del origen de datos.
 	 */
-	void hidratar(char * buffer,unsigned size); 
+	unsigned hidratar(char * buffer,unsigned size); 
 	
 	unsigned size();
+	
+	void print();
 };
 
 #endif // REGISTRO_H

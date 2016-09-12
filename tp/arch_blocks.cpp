@@ -87,6 +87,7 @@ void ArchBlocks::readHeader(){
 				formato.push_back(aux);
 	} while (!terminar);
 	fclose(archivo);	
+	offset = sizeof(short) + formato.size() + sizeof(char);
 }
 
 ArchBlocks::ArchBlocks(std::string nombreArchivo){
@@ -173,3 +174,10 @@ void ArchBlocks::grabarBloque(char * bloque){
 	fclose(archivo);
 }
 
+unsigned short ArchBlocks::getTamBlock(){
+  return this->tamanioBloque;
+}
+	
+std::string ArchBlocks::getFormato(){
+    return this->formato;
+}
