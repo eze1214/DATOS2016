@@ -30,7 +30,7 @@ class Registro{
 	 * desde el buffer pasado como parametro con el size definido
 	 * 
 	 */
-	unsigned grabar(char * buffer,unsigned size,unsigned num);
+	unsigned grabar(const char * buffer,unsigned size,unsigned num);
 
 public:
 	/*Inicializa al registro 
@@ -43,7 +43,7 @@ public:
 	 *en el caso de sD debe contener al final el caracter \0. Devuelve
 	 * la cantidad de bytes escritos.
 	 */
-	unsigned writeCampo(char * value,unsigned size,unsigned numCampo);
+	unsigned writeCampo(const char * value,unsigned size,unsigned numCampo);
 	
 	/*Devuelve una copia de un campo para que sea accedido desde afuera
 	 * 
@@ -59,7 +59,7 @@ public:
 	
 	/*Hidratar: buffer: origen de datos, size: tamaño del origen de datos.
 	 */
-	unsigned hidratar(char * buffer,unsigned size); 
+	unsigned hidratar(const char * buffer,unsigned size); 
 	
 	unsigned size();
 	

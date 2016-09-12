@@ -4,7 +4,52 @@
 #include <string>
 #include <cstring>
 #include "../bytemap.h"
+#include <iostream>
 
+TEST(Registro, serializarEHidratar){
+	Registro registro("sL");
+	char mensaje[256]; 
+	for (int i = 0; i< 256; i++)
+		mensaje[i] = i;
+	registro.writeCampo((char*)&mensaje,256,0);
+	std::string buffer3;
+	registro.serializar(buffer3);
+	char buffer2[257];
+	unsigned char prefijo = 255;
+	memcpy(buffer2,(char*)&prefijo,sizeof(char));
+	memcpy(buffer2+1,mensaje,sizeof(mensaje));
+	Registro registro2("sL");
+	registro.hidratar(buffer3.c_str(),buffer3.size());
+	std::string buffer4;
+	registro.serializar(buffer4);
+	EXPECT_EQ(*buffer2,*buffer4.c_str());
+}
+TEST(Registro, RegistroLongitudFijaMaxima){
+	Registro registro("sL");
+	char mensaje[256]; 
+	for (int i = 0; i< 256; i++)
+		mensaje[i] = i;
+	registro.writeCampo((char*)&mensaje,256,0);
+	std::string buffer3;
+	registro.serializar(buffer3);
+	char buffer2[257];
+	unsigned char prefijo = 255;
+	memcpy(buffer2,(char*)&prefijo,sizeof(char));
+	memcpy(buffer2+1,mensaje,sizeof(mensaje));
+	EXPECT_EQ(*buffer2,*buffer3.c_str());
+}
+TEST(Registro, RegistroLongitudFija){
+	Registro registro("sL");
+	char mensaje[] = "Hola Soy Eze";
+	registro.writeCampo((char*)&mensaje,12,0);
+	std::string buffer3;
+	registro.serializar(buffer3);
+	char buffer2[13];
+	unsigned char prefijo = 11;
+	memcpy(buffer2,(char*)&prefijo,sizeof(char));
+	memcpy(buffer2+1,mensaje,sizeof(mensaje)-1);
+	EXPECT_EQ(*buffer2,*buffer3.c_str());
+}
 TEST(Registro, create) {
 	Registro registro ("i1,i2,i4");
 	char a = 5;
