@@ -39,7 +39,8 @@ public:
    * especificado por tam
    * Defvuelve 0 en caso de error
    */
-  unsigned getBloque(unsigned tam);
+  unsigned int getTamBlock(){ return sizeBloque;}
+	unsigned getBloque(unsigned tam);
   
   /* Recibe la longitud del tamaño del bloque
    * debe ser un numero entre 1 y 256
@@ -59,7 +60,7 @@ public:
   /*Agrega bytes al bloque especificado
    *es decir que aumenta el espacio ocupado
    */
-  void add(unsigned numero,unsigned tamBlk);
+  void add(unsigned numeroBloque,unsigned tamBlk);
   
   /*Quita bytes del bloque espedcificado
    * es decir que disminuye el espacio ocupado

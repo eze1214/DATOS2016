@@ -26,13 +26,23 @@ using namespace std;
 class ArchBlocks {
 private:
 	string nombreArchivo;
+	string formato;
 	int cantidadDeBloques;
-	int tamanioBloque;
+	unsigned short tamanioBloque;
 	int obtenerCantidadBloquesTotales();
 	bool existeArchivo(string nombreArchivo);
-	void crearArchivo(string nombreArchivo);
+	void crearArchivo(string nombreArchivo,std::string configuracion);
+	char unsigned offset; //Me indica el offset que tiene el archivo dado por el sector destinado a guardar
+												//la configuracion (tamño mapa de bytes y formato de registro)
+	void readHeader();
+	void saveHeader();
 public:
-	ArchBlocks(string,int,string);
+	void grabarFormato(std::string & formato);
+	void leerFormato(std::string & formato);
+	
+	ArchBlocks(std::string nombreArchivo);
+	ArchBlocks(string filename ,unsigned short tamBlock ,string formato);
+	
 	ArchBlocks(string,int);
 	virtual ~ArchBlocks();
 	bool existeBloque(int numeroBloque);
@@ -40,6 +50,6 @@ public:
 	int getCantidadBloques();
 	char * getDatosBloque();
 	void grabarBloque(char *bloque);
-	void grabarBloque(char *bloque,unsigned int numeroDeBloque);
+	void grabarBloque(const char *bloque,unsigned int numeroDeBloque);
 };
 #endif /* MANEJADORARCHIVOS_H_ */

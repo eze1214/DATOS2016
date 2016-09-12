@@ -48,8 +48,7 @@ CFLAGS += -ggdb -DDEBUG -fno-inline
 CSTD = c99
 
 # Estandar de C++ a usar
-CXXSTD = c++11
-
+CXXSTD = c++98
 # Si se quiere compilar estaticamente, descomentar la siguiente linea
 #static = si
 
