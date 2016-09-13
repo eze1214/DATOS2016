@@ -5,6 +5,7 @@
 #include <cstring>
 #include "../bytemap.h"
 #include <iostream>
+#include "../condicion.h"
 
 TEST(Registro, serializarEHidratar){
 	Registro registro("sL");
@@ -122,7 +123,7 @@ TEST(Bloque,size){
   bloque.add(registro1);
   bloque.add(registro2);
     
-  EXPECT_EQ(bloque.size(),14);
+  EXPECT_EQ(bloque.size(),15);//Uno mas por el fin de bloque
 }
 
 TEST (Bloque,serializarNummer){
@@ -141,7 +142,7 @@ TEST (Bloque,serializarNummer){
   bloque.add(registro1);
   bloque.add(registro2);
   std::string cadena;
-  EXPECT_EQ(bloque.serializar(cadena),14); 
+  EXPECT_EQ(bloque.serializar(cadena),15);//Uno mas por el fin de bloque 
 }
 
 TEST (Bloque,del){
@@ -282,6 +283,70 @@ TEST(bytemap,serializarTodoLleno){
 TEST(bytemap,registroExcedeBloque){
 		ByteMap bytemap(256);
 		EXPECT_EQ(bytemap.getBloque(2000),0);
+}
+
+TEST(condicion,condicionVerdadera){
+	Registro registro("i2");
+	short a = 5;
+	registro.writeCampo((char*)&a,sizeof(short),0);
+	Condicion condicion;
+	condicion.add(0,"i2",(char*)&a,sizeof(short));
+	EXPECT_EQ(condicion.evaluar(registro),true);
+}
+
+TEST(condicion,condicionFalsa){
+	Registro registro("i2");
+	short a = 5;
+	registro.writeCampo((char*)&a,sizeof(short),0);
+	Condicion condicion;
+	short b = 6;
+	condicion.add(0,"i2",(char*)&b,sizeof(short));
+	EXPECT_EQ(condicion.evaluar(registro),false);
+}
+
+TEST(condicion,condicionVerdaderaVariosCampos){
+	Registro registro("i2,sD,i2");
+	short a = 5;
+	short b = 20;
+	char cadena [] = "holanda";
+	registro.writeCampo((char*)&a,sizeof(short),0);
+	registro.writeCampo((char*)&cadena,sizeof(cadena),1);
+	registro.writeCampo((char*)&b,sizeof(short),2);
+	Condicion condicion;
+	condicion.add(0,"i2",(char*)&a,sizeof(short));
+	condicion.add(2,"i2",(char*)&b,sizeof(short));
+	EXPECT_EQ(condicion.evaluar(registro),true);
+}
+
+TEST(Registro, longitudVariable){
+	Registro registro("i2,sD,i2");
+	short a = 5;
+	char cadena [] = "holanda";
+	short b =20;
+	registro.writeCampo((char*)&a,sizeof(short),0);
+	registro.writeCampo((char*)&cadena,sizeof(cadena),1);
+	registro.writeCampo((char*)&b,sizeof(short),2);
+	std::string serializado;
+	registro.serializar(serializado);
+	std::string buffer;
+	buffer.insert(0,(char*)&a,sizeof(short));
+	buffer.insert(2,cadena,8);
+	buffer.insert(10,(char*)&b,2);
+	EXPECT_EQ(*buffer.c_str(),*serializado.c_str());	
+}
+
+TEST(Registro, longitudFija){
+	Registro registro("sL");
+	char cadena [] = "holanda";
+	registro.writeCampo((char*)&cadena,sizeof(cadena),0);
+	std::string serializado;
+	registro.serializar(serializado);
+	std::string buffer;
+	char a = 7;
+	buffer.insert(0,(char*)&a,sizeof(char));
+	buffer.insert(1,cadena,7);
+	EXPECT_EQ(*buffer.c_str(),*serializado.c_str());
+	
 }
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest( &argc, argv );

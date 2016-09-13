@@ -17,7 +17,7 @@ extension = cpp
 # descomentar la línea (quitarle el '#' del principio).
 # NOTA: No poner cabeceras (.h).
 fuentes = test.cpp ../registro.cpp ../parser_formato.cpp ../bloque.cpp \
-				../bytemap.cpp 
+				../bytemap.cpp ../condicion.cpp 
 
 # Si usa funciones de math.h, descomentar (quitar el '#' a) la siguiente línea.
 #math = si

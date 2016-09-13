@@ -27,6 +27,7 @@ void Bloque::add(const Registro & registro){
 }
 
 unsigned Bloque::serializar(std::string & buffer){
+		char finBloque = '\n';
 		it = registros.begin();
 		buffer.clear();
 		for(;it!=registros.end();++it){
@@ -34,6 +35,7 @@ unsigned Bloque::serializar(std::string & buffer){
 			 (*it).serializar(auxi);
 			 buffer += auxi;
 		}
+		buffer += finBloque;
 	return size();	
 	}
 	
@@ -43,5 +45,6 @@ unsigned int Bloque::size(){
 	for(;it!=registros.end();++it){
 			contador += (*it).size();
 	}
+	contador ++; //Cuenta el caracter de fin de bloque
 	return contador;
 }

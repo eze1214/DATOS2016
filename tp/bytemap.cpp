@@ -58,13 +58,13 @@ ByteMap::ByteMap(unsigned sizeBloque){
   
   bool ByteMap::convertir(unsigned tam, unsigned char & tamFinal){
     unsigned char devolver;
-//     if (tam == sizeBloque) devolver = sizeBloque -1;
-//     else if (tam > sizeBloque) {
-// 			return false;
-// 		}else
-// 			devolver = floor(tam * MAX_CHAR / (sizeBloque-1));
-//     tamFinal = devolver;
-		tamFinal = tam * (MAX_CHAR. / sizeBloque.)
+     if (tam == sizeBloque) devolver = sizeBloque -1;
+     else if (tam > sizeBloque) {
+ 			return false;
+ 		}else
+ 			devolver = floor(tam * MAX_CHAR / (sizeBloque-1));
+     tamFinal = devolver;
+	//	tamFinal = tam * (MAX_CHAR. / sizeBloque.)
 		return true;
   }
   
@@ -76,7 +76,8 @@ std::vector< unsigned short > ByteMap::getBloquesOcupados(){
   return ocupados;
 }
 
+//TODO testear
 unsigned int ByteMap::getEspacioOcupado(unsigned int numBlk){
-	unsigned espacioOcupado = (bytes[numBlk]*sizeBloque)./MAX_CHAR.
-	return bytes[numBlk];
+	unsigned espacioOcupado = (bytes[numBlk]*(sizeBloque /MAX_CHAR));
+	return espacioOcupado;
 }

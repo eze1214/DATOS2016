@@ -64,15 +64,17 @@ bool ArchBlockRRLV::insert(Bloque & bloque){
 	 */
 	Bloque ArchBlockRRLV::getBloque(unsigned short numBlock){
 		unsigned short tamBlock = archBlocks.getTamBlock();
-		unsigned short tam = byteMap.getEspacioOcupado(numBlock);
 		char * buffer= new char[tamBlock];
 		archBlocks.leerBloque(buffer,numBlock);
 		unsigned pos=0;
 		Bloque bloque;
-		while (pos < tam){
-				Registro registro(archBlocks.getFormato());
-				pos+=registro.hidratar(buffer+pos,tamBlock-pos);
-				bloque.add(registro);
+		bool terminar = false;
+		while (!terminar){
+				if ((buffer[pos]) == '\n') terminar = true;
+				else{
+					Registro registro(archBlocks.getFormato());
+					pos+=registro.hidratar(buffer+pos,tamBlock-pos);
+					bloque.add(registro);}
 		}
 		delete [] buffer;
 		return bloque;

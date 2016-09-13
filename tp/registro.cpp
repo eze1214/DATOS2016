@@ -181,6 +181,8 @@ std::string Registro::getString() const{
 			}
 			output<<std::endl;
 			std::string final = output.str();
+			unsigned pos = final.find_last_of(",");
+			final.erase(pos,1);
 			return final;
 }
 void Registro::print(){
