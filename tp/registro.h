@@ -2,7 +2,7 @@
 #define REGISTRO_H
 #include "parser_formato.h"
 #include <vector>
-
+#include <iostream>
 struct Campo{
 		std::string value;
 		Formato formato;
@@ -64,6 +64,10 @@ public:
 	unsigned size();
 	
 	void print();
+	
+	friend std::ostream& operator << (std::ostream &o,const Registro &p);
+	
+	std::string getString() const;
 };
 
 #endif // REGISTRO_H

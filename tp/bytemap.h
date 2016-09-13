@@ -69,6 +69,10 @@ public:
    * es decir que disminuye el espacio ocupado
    */
   void del(unsigned numero,unsigned tamBlk);
+	
+	std::vector<unsigned short> getBloquesOcupados();
+	
+	unsigned getEspacioOcupado(unsigned numBlk);
 };
 
 #endif // BYTEMAP_H

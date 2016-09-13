@@ -1,23 +1,23 @@
 #include "gestor_aa.h"
-#include <cstdlib>
-GestorAA::GestorAA(std::string formato){
-	
-}
+#include <fstream>
+#include <vector>
+#include "bloque.h"
+GestorAA::GestorAA(std::string filename):archivo(filename){}
 
-GestorAA::import(std::string csv,std::string formato){
-	FILE *archivo;
- 	
- 	char caracteres[100];
- 	
- 	archivo = fopen(csv.data(),"r");
- 	
- 	if (archivo == NULL)
- 		std::cout<<"Error el archivo no existe"<<std::endl;
- 	
- 	while (feof(archivo) == 0)
- 	{
- 		fgets(caracteres,100,archivo);
- 		
+void GestorAA::exportar(std::string csv){
+	ofstream fs(csv.data());
+	std::vector <unsigned short> ocupados = archivo.getNumBloquesOcupados();
+	std::vector <unsigned short>::iterator it = ocupados.begin();
+	std::cout<<"impresion"<<std::endl;
+	for(;it!=ocupados.end();it++){
+			std::cout<<"Imprimo un bloque nuevo"<<std::endl;
+			Bloque bloque = archivo.getBloque(*it);
+			unsigned cantRegistros = bloque.cantRegistros();
+			for(unsigned i = 0; i<cantRegistros; i++){
+				std::cout<<"Imprimo un registro nuevo"<<std::endl;
+					Registro registro = bloque.getRegistro(i);
+					cout<<registro;
+			}
 	}
-        fclose(archivo);
+	fs.close();
 }

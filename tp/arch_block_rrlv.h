@@ -23,6 +23,10 @@ public:
 	ArchBlockRRLV(std::string  nombre, unsigned short tamBlock,
 							  std::string  formato);
 	
+	/*Obtiene un vector con los numeros de los bloques ocupados
+	 * 
+	 */
+		std::vector <unsigned short> getNumBloquesOcupados();
 	/*Inserta un bloque donde haya espacio
 	 * 
 	 */

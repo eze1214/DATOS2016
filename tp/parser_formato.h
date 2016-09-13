@@ -6,9 +6,9 @@
  * de un registro
  */
 
-const unsigned SIZE_CADENA_CORTA = 256;
+const unsigned SIZE_CADENA_CORTA = 256;//Esto no va
 const unsigned SIZE_FECHA_CORTA = 8;
-const unsigned SIZE_FECHA_LARGA = 14; 
+const unsigned SIZE_FECHA_LARGA = 15; 
 
   enum TIPO_FORMATOS{
    ENTERO=0,

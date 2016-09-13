@@ -2,6 +2,7 @@
 #include <cstring>
 #include "parser_formato.h"
 #include <iostream>
+#include <sstream>
 Registro::Registro(const std::string & formato){
 		ParserFormato parser(formato);
 		formatos = parser.getFormatos();
@@ -129,6 +130,59 @@ unsigned Registro::hidratar(const char* buffer, unsigned int size){
 			return contador;
 	}
 	
+	
+// Sobrecarga del operador << para la clase Pareja
+std::ostream& operator << (std::ostream &o, const Registro &p){
+		std::string final = p.getString();
+		o << final;
+    return o;
+}
+
+std::string Registro::getString() const{
+	std::vector<Campo>::const_iterator it_campos_const = campos.cbegin();
+	std::stringstream output;
+	for (; it_campos_const!= campos.cend();++it_campos_const){
+						switch((*it_campos_const).formato.tipo){
+							case ENTERO:
+								switch ((*it_campos_const).formato.longitud){
+									case 1:{
+										char variable;
+										memcpy(&variable,(*it_campos_const).value.c_str(),sizeof(char));
+										output<<variable;}
+										break;
+									case 2:{
+										short variable;
+										memcpy((char*)&variable,(*it_campos_const).value.c_str(),sizeof(short));
+										output<<variable;}
+										break;
+									case 4:{
+										int variable;
+										memcpy((char*)&variable,(*it_campos_const).value.c_str(),sizeof(int));
+										output<<variable;}
+										break;
+									case 8:{
+										long long variable;
+										memcpy((char*)&variable,(*it_campos_const).value.c_str(),sizeof(long long));
+										output<<variable;}
+										break;
+									default: std::cout<<"Registro no imprimible"<<std::endl;
+								}
+								break;
+							case CADENA_FIJA:
+							case CADENA_VARIABLE:
+							case FECHA_CORTA:
+							case FECHA_LARGA:
+								output<<(*it_campos_const).value;
+							break;
+							default:
+								std::cout<<"Formato desconocido"<<std::endl;
+						}
+						output<<",";
+			}
+			output<<std::endl;
+			std::string final = output.str();
+			return final;
+}
 void Registro::print(){
 	it_campos = campos.begin();
 	for (; it_campos!= campos.end();++it_campos){

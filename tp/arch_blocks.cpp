@@ -17,7 +17,7 @@ int ArchBlocks::obtenerCantidadBloquesTotales(){
 	FILE *archivo;
 	archivo =fopen(nombreArchivo.data(),"r+b");
 	fseek(archivo, 0, SEEK_END);
-	float cuenta = ftell(archivo)/(float)this->tamanioBloque;
+	float cuenta = (ftell(archivo)-offset)/(float)this->tamanioBloque;
 	int aux = (int) ceil(cuenta);
 	unsigned int  numeroDeBloquesTotales = aux;
 	fclose(archivo);
@@ -89,7 +89,7 @@ void ArchBlocks::readHeader(){
 	fclose(archivo);	
 	offset = sizeof(short) + formato.size() + sizeof(char);
 }
-
+//Se usa para lectura
 ArchBlocks::ArchBlocks(std::string nombreArchivo){
 	this->nombreArchivo = nombreArchivo; 
 	if (existeArchivo(nombreArchivo)){
@@ -107,7 +107,7 @@ ArchBlocks::ArchBlocks(std::string nombreArchivo){
  * El archivo va a comenzar con una cabecera 2 dos bytes la cual va a indicar  
  * la cantidad de bytes. Seguido del formato guardado como un registro de
  * longitud variable. Finalizando con \0. 
- * Luego sigue el byteMap y los bloques todos de tamaño fijo.
+ * Luego sigue el byteMap y los bloques todos de tamaño fijo. Se usa para escritura
  */
 ArchBlocks::ArchBlocks(std::string nombreArchivo,unsigned short tamanioBloque,std::string formato){
 	this->nombreArchivo = nombreArchivo;
@@ -116,8 +116,6 @@ ArchBlocks::ArchBlocks(std::string nombreArchivo,unsigned short tamanioBloque,st
 	this->offset =  sizeof(unsigned short)+ formato.size()+ sizeof(char);
 	if (existeArchivo(nombreArchivo)){
 		std::cout<<"El archivo ya existe será sobreescribido"<<std::endl;
-	}
-	else {
 		this->cantidadDeBloques = 0;
 	}
 	crearArchivo(nombreArchivo,"wb+");
@@ -125,7 +123,7 @@ ArchBlocks::ArchBlocks(std::string nombreArchivo,unsigned short tamanioBloque,st
 }
 
 int ArchBlocks::getCantidadBloques(){
-	return this->cantidadDeBloques;
+	return this->obtenerCantidadBloquesTotales();
 }
 ArchBlocks::~ArchBlocks() {
 }

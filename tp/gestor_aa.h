@@ -1,18 +1,13 @@
 #ifndef GESTORAA_H
 #define GESTORAA_H
-
+#include "arch_block_rrlv.h"
 class GestorAA{
-	enum TIPO {
-		ARCHBLOCK,ARCHRRLV
-	};
-	TIPO tipoDeGestor;
 private:
-	
+	ArchBlockRRLV archivo;
 public:
 
 GestorAA(std::string filename);
-GestorAA(std::string formato);
-import(std::string csv);
+void exportar(std::string csv);
 
 };
 
