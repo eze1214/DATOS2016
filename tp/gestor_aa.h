@@ -8,7 +8,9 @@ public:
 
 GestorAA(std::string filename);
 void exportar(std::string csv);
-
+GestorAA(std::string  nombre, unsigned short tamBlock,
+							  std::string  formato);
+unsigned short getTamBloque();
 };
 
 #endif // GESTORAA_H

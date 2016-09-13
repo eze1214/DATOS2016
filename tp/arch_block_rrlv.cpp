@@ -6,7 +6,7 @@
 
 ArchBlockRRLV::ArchBlockRRLV(std::string  nombre, unsigned short  tamBlock, std::string  formato):	archBlocks(nombre,tamBlock,formato),
 											byteMap(tamBlock)
-										{}
+										{} //TODO no esta implementado
 
 ArchBlockRRLV::ArchBlockRRLV(std::string nombre):archBlocks(nombre){
 	unsigned short tamBlock = archBlocks.getTamBlock();
@@ -83,3 +83,7 @@ bool ArchBlockRRLV::insert(Bloque & bloque){
 	std::vector <unsigned short> ArchBlockRRLV::getNumBloquesOcupados(){
 		return byteMap.getBloquesOcupados();
 	}
+	
+short unsigned int ArchBlockRRLV::getTamBloque(){
+	return //TODO terminar
+}

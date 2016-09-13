@@ -4,6 +4,12 @@
 #include "bloque.h"
 GestorAA::GestorAA(std::string filename):archivo(filename){}
 
+unsigned short GestorAA::getTamBloque(){
+		return archivo.getTamBloque();
+}
+GestorAA::GestorAA(string nombre, short unsigned int tamBlock, string formato):
+													archivo(nombre,tamBlock,formato){}
+
 void GestorAA::exportar(std::string csv){
 	ofstream fs(csv.data());
 	std::vector <unsigned short> ocupados = archivo.getNumBloquesOcupados();

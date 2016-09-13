@@ -36,6 +36,7 @@ public:
 	bool insert(Bloque & bloque, unsigned numBlock);
 	void del(unsigned numBlock);
 	Bloque getBloque(unsigned short numBlock);
+	unsigned short getTamBloque();
 };
 
 #endif // ARCHBLOCKRRLV_H
