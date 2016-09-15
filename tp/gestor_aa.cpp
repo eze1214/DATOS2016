@@ -24,3 +24,11 @@ void GestorAA::exportar(std::string csv){
 	}
 	fs.close();
 }
+
+string GestorAA::getFormato(){
+	return archivo.getFormato();
+}
+
+std::vector<unsigned short> GestorAA::getNumBloquesOcupados(){
+		return archivo.getNumBloquesOcupados();
+}

@@ -11,6 +11,7 @@ void ByteMap::setTamBlock(unsigned sizeBloque){
 }
 ByteMap::ByteMap(unsigned sizeBloque){
  setTamBlock(sizeBloque);
+ coef = ceil(100 * MAX_CHAR / sizeBloque);
 }
 
   std::string ByteMap::serializar(){
@@ -48,12 +49,10 @@ void ByteMap::set(unsigned int numeroBloque, unsigned int ocupado){
     bool encontro = false;
     unsigned char tamFinal;
 		if(convertir(tam,tamFinal)){
-			std::cout<<"tam final"<<(int)tamFinal<<std::endl;
 			unsigned i = 1;
 			while( (i <= sizeBloque) && !encontro){
 				unsigned char espacioLibre = MAX_CHAR - bytes[i];
-				std::cout<<"EspacioLibre " <<(int)espacioLibre<<" en i" <<i<<std::endl;
-				if (tamFinal <= espacioLibre){ 
+				if (tamFinal <=	 espacioLibre){ 
 					encontro = true;
 				} else
 					i++;
@@ -65,13 +64,11 @@ void ByteMap::set(unsigned int numeroBloque, unsigned int ocupado){
   return 0;}
   
   bool ByteMap::convertir(unsigned tam, unsigned char & tamFinal){
-    unsigned char devolver;
-     if (tam == sizeBloque) devolver = sizeBloque -1;
+     if (tam == sizeBloque) tamFinal = MAX_CHAR;
      else if (tam > sizeBloque) {
  			return false;
  		}else
- 			devolver = floor(tam * MAX_CHAR / (sizeBloque-1));
-     tamFinal = devolver;
+ 			tamFinal = ceil(tam * coef / 100);
 	//	tamFinal = tam * (MAX_CHAR. / sizeBloque.)
 		return true;
   }

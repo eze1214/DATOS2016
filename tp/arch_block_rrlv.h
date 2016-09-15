@@ -39,6 +39,7 @@ public:
 	void del(unsigned numBlock);
 	Bloque getBloque(unsigned short numBlock);
 	unsigned short getTamBloque();
+	std::string getFormato();
 };
 
 #endif // ARCHBLOCKRRLV_H

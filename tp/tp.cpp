@@ -9,6 +9,8 @@
 #include "registro.h"
 #include "arch_blocks.h"
 #include "gestor_aa.h"
+#include "condicion.h"
+#include "operador_seleccion.h"
 int main(int argc, char * argv[]){
   ArchBlockRRLV archivo("prueba.bin",512,"i2,i2,d,dt");
 	Registro registro("i2,i2,d,dt");
@@ -35,5 +37,9 @@ int main(int argc, char * argv[]){
 	
 	GestorAA gestor("prueba.bin");
 	gestor.exportar("prueba.csv");
+	
+	Condicion condicion;
+	condicion.add(0,"i2",(char * )&a,sizeof(short));
+	OperadorSeleccion operador("seleccion.bin",gestor,condicion);
 	return 0;
 }

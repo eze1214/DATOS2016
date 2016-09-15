@@ -23,12 +23,10 @@ ArchBlockRRLV::ArchBlockRRLV(std::string nombre):archBlocks(nombre){
 void ArchBlockRRLV::insert(Registro & registro){
 	unsigned numBlock = byteMap.getBloque(registro.size());
 	Bloque bloque;
-	std::cout<<archBlocks.getCantidadBloques()<< "num block "<<numBlock<<std::endl;
 	
 	if (archBlocks.getCantidadBloques() > numBlock)
 		bloque = this->getBloque(numBlock);
 	bloque.add(registro);
-	std::cout<<"Bloque size "<<bloque.size()<<std::endl;
 	this->insert(bloque,numBlock);
 }
 	
@@ -99,5 +97,10 @@ bool ArchBlockRRLV::insert(Bloque & bloque){
 	}
 	
 short unsigned int ArchBlockRRLV::getTamBloque(){
-	return 0;//return //TODO terminar
+	return archBlocks.getTamBlock();
 }
+
+string ArchBlockRRLV::getFormato(){
+ return archBlocks.getFormato();
+}
+

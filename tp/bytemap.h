@@ -41,7 +41,7 @@ public:
    */
   unsigned int getTamBlock(){ return sizeBloque;}
 	unsigned getBloque(unsigned tam);
-  
+  unsigned coef; //Coeficiente que se utiliza para la conversión
   /* Recibe la longitud del tamaño del bloque
    * debe ser un numero entre 1 y 256
    */
