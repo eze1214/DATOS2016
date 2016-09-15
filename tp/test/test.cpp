@@ -193,6 +193,27 @@ TEST (Bloque, serializar){
   EXPECT_EQ(*cadena.c_str(),*buffer1);
 }
 
+TEST(bytemap, getBloque){
+		ByteMap bytemap(1024);
+		for(int i = 0; i<10; i++){
+			EXPECT_EQ(bytemap.getBloque(100),1);
+			bytemap.add(1,100);
+		}
+		EXPECT_EQ(bytemap.getBloque(100),2);
+	
+}
+
+TEST(bytemap, getBloqueWithSet){
+		ByteMap bytemap(1024);
+		int acum = 0;
+		for(int i = 0; i<39; i++){
+			EXPECT_EQ(bytemap.getBloque(27),1);
+			acum +=27;
+			bytemap.add(1,27);
+		}
+		EXPECT_EQ(bytemap.getBloque(27),1);
+	
+}
 TEST(bytemap, EspacioBloque2){
 	ByteMap bytemap(256);
 	bytemap.add(1,254);

@@ -27,6 +27,12 @@ ByteMap::ByteMap(unsigned sizeBloque){
    }
   }
   
+void ByteMap::set(unsigned int numeroBloque, unsigned int ocupado){
+	unsigned char tamFinal;
+	convertir(ocupado,tamFinal);
+  bytes[numeroBloque] = tamFinal;
+}
+  
   void ByteMap::add(unsigned numero,unsigned tam){
       unsigned char tamFinal;
 			convertir(tam,tamFinal);
@@ -42,9 +48,11 @@ ByteMap::ByteMap(unsigned sizeBloque){
     bool encontro = false;
     unsigned char tamFinal;
 		if(convertir(tam,tamFinal)){
+			std::cout<<"tam final"<<(int)tamFinal<<std::endl;
 			unsigned i = 1;
 			while( (i <= sizeBloque) && !encontro){
 				unsigned char espacioLibre = MAX_CHAR - bytes[i];
+				std::cout<<"EspacioLibre " <<(int)espacioLibre<<" en i" <<i<<std::endl;
 				if (tamFinal <= espacioLibre){ 
 					encontro = true;
 				} else

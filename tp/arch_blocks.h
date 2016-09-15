@@ -27,9 +27,9 @@ class ArchBlocks {
 private:
 	string nombreArchivo;
 	string formato;
-	int cantidadDeBloques;
+	unsigned cantidadDeBloques;
 	unsigned short tamanioBloque;
-	int obtenerCantidadBloquesTotales();
+	unsigned obtenerCantidadBloquesTotales();
 	bool existeArchivo(string nombreArchivo);
 	void crearArchivo(string nombreArchivo,std::string configuracion);
 	char unsigned offset; //Me indica el offset que tiene el archivo dado por el sector destinado a guardar
@@ -48,7 +48,7 @@ public:
 	
 	bool existeBloque(int numeroBloque);
 	void leerBloque(char* destino,int numeroBloque);
-	int getCantidadBloques();
+	unsigned getCantidadBloques();
 	char * getDatosBloque();
 	void grabarBloque(char *bloque);
 	void grabarBloque(const char *bloque,unsigned int numeroDeBloque);

@@ -6,7 +6,7 @@
 
 ArchBlockRRLV::ArchBlockRRLV(std::string  nombre, unsigned short  tamBlock, std::string  formato):	archBlocks(nombre,tamBlock,formato),
 											byteMap(tamBlock)
-										{} //TODO no esta implementado
+										{saveByteMap();} //TODO no esta implementado
 
 ArchBlockRRLV::ArchBlockRRLV(std::string nombre):archBlocks(nombre){
 	unsigned short tamBlock = archBlocks.getTamBlock();
@@ -19,6 +19,18 @@ ArchBlockRRLV::ArchBlockRRLV(std::string nombre):archBlocks(nombre){
 	byteMap.hidratar(buffer2);
 	delete [] buffer;
 }
+
+void ArchBlockRRLV::insert(Registro & registro){
+	unsigned numBlock = byteMap.getBloque(registro.size());
+	Bloque bloque;
+	std::cout<<archBlocks.getCantidadBloques()<< "num block "<<numBlock<<std::endl;
+	
+	if (archBlocks.getCantidadBloques() > numBlock)
+		bloque = this->getBloque(numBlock);
+	bloque.add(registro);
+	std::cout<<"Bloque size "<<bloque.size()<<std::endl;
+	this->insert(bloque,numBlock);
+}
 	
 void ArchBlockRRLV::saveByteMap(){
 	std::string serializado = byteMap.serializar();
@@ -27,7 +39,7 @@ void ArchBlockRRLV::saveByteMap(){
 bool ArchBlockRRLV::insert(Bloque & bloque){
 		unsigned int numBlk = byteMap.getBloque(bloque.size());
 		if (numBlk != 0 ){
-			byteMap.add(numBlk,bloque.size());
+			byteMap.set(numBlk,bloque.size());
 			saveByteMap();
 			std::string serializado;
 			bloque.serializar(serializado);
@@ -43,6 +55,8 @@ bool ArchBlockRRLV::insert(Bloque & bloque){
 	 */
 	bool ArchBlockRRLV::insert(Bloque & bloque, unsigned numBlock){
 		if (numBlock != 0 ){
+			byteMap.set(numBlock,bloque.size());
+			saveByteMap();
 			std::string serializado;
 			bloque.serializar(serializado);
 			while(serializado.size()!= byteMap.getTamBlock()){
@@ -85,5 +99,5 @@ bool ArchBlockRRLV::insert(Bloque & bloque){
 	}
 	
 short unsigned int ArchBlockRRLV::getTamBloque(){
-	return //TODO terminar
+	return 0;//return //TODO terminar
 }

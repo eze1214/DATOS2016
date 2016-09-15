@@ -22,15 +22,17 @@ int main(int argc, char * argv[]){
 	registro.writeCampo(fecha,sizeof(fecha),2);
 	registro.writeCampo(fechaLarga,sizeof(fechaLarga),3);
 	Bloque bloque;
-	for(int i = 0; i<5;i++)
-	bloque.add(registro);
-	archivo.insert(bloque);
+	for(int i = 0; i<1000;i++)
+		archivo.insert(registro);
+	//	bloque.add(registro);
+	//archivo.insert(bloque);
 	//ArchBlockRRLV archivo2("prueba.bin");
 	//Bloque bloque2 = archivo2.getBloque(1);
 	//Registro registro1 = bloque2.getRegistro(0);
 	//registro.print();
 	//std::cout<<std::endl;
 	//registro1.print();
+	
 	GestorAA gestor("prueba.bin");
 	gestor.exportar("prueba.csv");
 	return 0;

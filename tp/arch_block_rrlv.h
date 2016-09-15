@@ -34,6 +34,8 @@ public:
 	/*insert(sobrescribe el bloque que se encuentre en numBlock)
 	 */
 	bool insert(Bloque & bloque, unsigned numBlock);
+	
+	void insert(Registro & registro);
 	void del(unsigned numBlock);
 	Bloque getBloque(unsigned short numBlock);
 	unsigned short getTamBloque();

@@ -64,7 +64,10 @@ public:
    *es decir que aumenta el espacio ocupado
    */
   void add(unsigned numeroBloque,unsigned tamBlk);
-  
+   /*Permite setear un valor se bytes ocupados 
+		* al numero de bloque especificado
+		*/
+	 void set(unsigned numeroBloque,unsigned ocupado);
   /*Quita bytes del bloque espedcificado
    * es decir que disminuye el espacio ocupado
    */

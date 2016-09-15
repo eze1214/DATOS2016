@@ -13,7 +13,7 @@
 #include <cstring>
 using namespace std;
 
-int ArchBlocks::obtenerCantidadBloquesTotales(){
+unsigned ArchBlocks::obtenerCantidadBloquesTotales(){
 	FILE *archivo;
 	archivo =fopen(nombreArchivo.data(),"r+b");
 	fseek(archivo, 0, SEEK_END);
@@ -122,7 +122,7 @@ ArchBlocks::ArchBlocks(std::string nombreArchivo,unsigned short tamanioBloque,st
 	saveHeader();
 }
 
-int ArchBlocks::getCantidadBloques(){
+unsigned int ArchBlocks::getCantidadBloques(){
 	return this->obtenerCantidadBloquesTotales();
 }
 ArchBlocks::~ArchBlocks() {
@@ -132,7 +132,7 @@ void ArchBlocks::leerBloque(char* destino,int numeroBloque){
 	FILE *archivo;
 	archivo = fopen (nombreArchivo.data(),"rb");
 	fseek(archivo,(numeroBloque*tamanioBloque)+ offset ,SEEK_SET);
-	if (fread(destino,tamanioBloque,1,archivo)==0) cout<<"Error Lectura"<<endl;
+	if (fread(destino,tamanioBloque,1,archivo)==0) cout<<"Error Lectura leer bloque"<<endl;
 	fclose(archivo);
 }
 
