@@ -15,9 +15,6 @@ bool Bloque::del(const unsigned & numRegistro){
 
 
 Registro Bloque::getRegistro(unsigned int numeroRegistro){
-	std::cout<<"despues error"<<std::endl;
-	std::cout<<registros.size()<<std::endl;
-	std::cout<<registros[numeroRegistro]<<std::endl;
 	return registros[numeroRegistro];
 }
 

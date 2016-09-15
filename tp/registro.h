@@ -6,6 +6,7 @@
 struct Campo{
 		std::string value;
 		Formato formato;
+		bool bloqueado;
 };
 
 /*Registro: crea un registro.
@@ -25,7 +26,7 @@ class Registro{
 	std::vector<Formato> formatos;
 	std::vector<Formato>::iterator it_formatos;
 	std::vector<Campo>::iterator it_campos;
-	
+	std::string formato;
 	/*Graba en un campo detallado por la variable num, 
 	 * desde el buffer pasado como parametro con el size definido
 	 * 
@@ -33,6 +34,13 @@ class Registro{
 	unsigned grabar(const char * buffer,unsigned size,unsigned num);
 
 public:
+	
+	/*Se utiliza para bloquear campos que no serán persistidos
+	 * 
+	 */
+	void bloquearCampo(const unsigned & numCampo);
+	void desbloquearCampo(const unsigned & numCampo);
+	void bloquearTodosCampos();
 	/*Inicializa al registro 
 	 * con un formato especificado. Se arma el vecto de formatos 
 	 * pero sin valores deben ser insertados con writeCampo.
@@ -68,6 +76,8 @@ public:
 	friend std::ostream& operator << (std::ostream &o,const Registro &p);
 	
 	std::string getString() const;
+	
+	std::string getFormato();
 };
 
 #endif // REGISTRO_H

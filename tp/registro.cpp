@@ -3,7 +3,7 @@
 #include "parser_formato.h"
 #include <iostream>
 #include <sstream>
-Registro::Registro(const std::string & formato){
+Registro::Registro(const std::string & formato):formato(formato){
 		ParserFormato parser(formato);
 		formatos = parser.getFormatos();
 		it_formatos = formatos.begin();
@@ -11,13 +11,30 @@ Registro::Registro(const std::string & formato){
 				Campo campo;
 				campo.formato = *it_formatos;
 				campo.value = ""; //Inicializo con nada
+				campo.bloqueado = false;
 				campos.push_back(campo);
 		}
 }
 	
+	void Registro::bloquearCampo(const unsigned & numCampo){
+		campos[numCampo].bloqueado = true;
+	}
+	
+	void Registro::desbloquearCampo(const unsigned & numCampo){
+		campos[numCampo].bloqueado = false;
+	}
+	
+void Registro::bloquearTodosCampos(){
+	for (unsigned i = 0; i<campos.size(); i++){
+		campos[i].bloqueado = true;
+	}
+}
+
+	
 	unsigned Registro::writeCampo(const char * value,unsigned size,unsigned numCampo){
 		unsigned len = 0;
 		Campo campo = campos[numCampo];
+		campo.value.clear();
 		switch(campo.formato.tipo){
 			case CADENA_FIJA:
 				campo.formato.longitud = size;
@@ -54,8 +71,9 @@ Registro::Registro(const std::string & formato){
  	it_campos = campos.begin();
  	unsigned pos = 0;
  	for(;it_campos!= campos.end();++it_campos){
- 		memcpy(buffer + pos, (*it_campos).value.c_str() ,(*it_campos).value.length());
- 		pos += (*it_campos).formato.longitud;
+		if(!(*it_campos).bloqueado){
+			memcpy(buffer + pos, (*it_campos).value.c_str() ,(*it_campos).value.length());
+			pos += (*it_campos).formato.longitud;}
  	}
  	return pos;
  }
@@ -65,14 +83,17 @@ unsigned int Registro::serializar(std::string & buffer){
 	buffer.clear();
 	unsigned pos = 0;
 	for(;it_campos!= campos.end();++it_campos){
-		if ((*it_campos).formato.tipo == CADENA_FIJA){
-			unsigned aux =((*it_campos).formato.longitud);
-			char prefijo = aux-1;
-			buffer.append(&prefijo,sizeof(char));//Le resto uno para poder aprovechar 256 bytes
-			pos++;
+		if(!(*it_campos).bloqueado){
+			if ((*it_campos).formato.tipo == CADENA_FIJA){
+				unsigned aux =((*it_campos).formato.longitud);
+				char prefijo = aux-1;
+				buffer.append(&prefijo,sizeof(char));//Le resto uno para poder aprovechar 256 bytes
+				pos++;
+			}
+			buffer.append((*it_campos).value);
+			pos += (*it_campos).formato.longitud;
 		}
-		buffer.append((*it_campos).value);
-		pos += (*it_campos).formato.longitud;}
+	}
 	return pos;
 }
 
@@ -117,8 +138,6 @@ unsigned Registro::hidratar(const char* buffer, unsigned int size){
 		pos += grabar(buffer+pos,size,numCampo);
 		numCampo++;
 	}
-	std::cout<<"----------------------Imprimir desd registro"<<std::endl;
-	this->print();
 	return pos;
 }
  
@@ -226,4 +245,37 @@ void Registro::print(){
 								std::cout<<"Formato desconocido"<<std::endl;
 						}
 			}
+}
+
+std::string Registro::getFormato(){
+	std::string salida;
+	salida.clear();
+	
+	std::stringstream buffer;
+  std::string::const_iterator it = formato.begin();
+ 
+	std::vector<std::string> auxiliar;
+	 for(;it != formato.end();it++){ 
+    if ((*it) != ',')
+      buffer<<*it;
+    else{
+      auxiliar.push_back(buffer.str());
+			buffer.clear();
+    }
+  }
+  
+  buffer.clear();
+  for(unsigned i = 0;i < auxiliar.size(); i++){
+			if (!campos[i].bloqueado){
+					buffer<<auxiliar[i];
+					buffer<<",";
+			}
+	}
+	
+	salida = buffer.str();
+	//Borro la coma
+	unsigned pos = salida.find_last_of(",");
+	salida.erase(pos,1);
+  
+	return salida;
 }

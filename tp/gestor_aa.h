@@ -15,7 +15,9 @@ unsigned short getTamBloque();
 std::string getFormato();
 std::vector <unsigned short>getNumBloquesOcupados();
 Bloque getBloque(unsigned numBlk){
-	return archivo.getBloque(numBlk);
+	Bloque bloque = archivo.getBloque(numBlk);
+	Registro registro = bloque.getRegistro(0);
+	return bloque;
 }
 
 void insert(Registro registro){
