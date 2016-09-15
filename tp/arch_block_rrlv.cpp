@@ -82,10 +82,11 @@ bool ArchBlockRRLV::insert(Bloque & bloque){
 		Bloque bloque;
 		bool terminar = false;
 		while (!terminar){
-				if ((buffer[pos]) == '\n') terminar = true;
+				if ((buffer[pos]) == '\n') {terminar = true;std::cout<<"Termino"<<std::endl;}
 				else{
 					Registro registro(archBlocks.getFormato());
 					pos+=registro.hidratar(buffer+pos,tamBlock-pos);
+					std::cout<<"------------------pos"<<pos<<std::endl;
 					bloque.add(registro);}
 		}
 		delete [] buffer;

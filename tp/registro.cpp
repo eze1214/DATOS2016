@@ -117,6 +117,8 @@ unsigned Registro::hidratar(const char* buffer, unsigned int size){
 		pos += grabar(buffer+pos,size,numCampo);
 		numCampo++;
 	}
+	std::cout<<"----------------------Imprimir desd registro"<<std::endl;
+	this->print();
 	return pos;
 }
  
