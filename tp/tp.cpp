@@ -11,7 +11,12 @@
 #include "gestor_aa.h"
 #include "condicion.h"
 #include "operador_seleccion.h"
+#include "operador_proyeccion.h"
+#include "operador_union.h"
+#include "operador_producto_cartesiano.h"
 int main(int argc, char * argv[]){
+	GestorAA gestor5("producto.bin");
+	gestor5.exportar("productoExportado.csv");
 						   ArchBlockRRLV archivo("prueba.bin",512,"i2,i2,d,dt");
 						 	Registro registro("i2,i2,d,dt");
 						 	short a = 20;
@@ -24,7 +29,7 @@ int main(int argc, char * argv[]){
 					 	registro.writeCampo(fecha,sizeof(fecha),2);
 					 	registro.writeCampo(fechaLarga,sizeof(fechaLarga),3);
 					 	Bloque bloque;
-					 	for(int i = 0; i<1000;i++)
+					 	for(int i = 0; i<50;i++)
 					 		archivo.insert(registro);
 						registro.writeCampo((char*)&b,sizeof(short),0);
 						archivo.insert(registro);
@@ -39,9 +44,19 @@ int main(int argc, char * argv[]){
 	
 	GestorAA gestor("prueba.bin");
 	//gestor.exportar("prueba.csv");
-	
+	GestorAA gestor2("prueba.bin");
 	Condicion condicion;
 	condicion.add(0,"i2",(char * )&b,sizeof(short));
 	OperadorSeleccion operador("seleccion.bin",gestor,condicion);
+	
+	std::vector<unsigned> lista;
+	lista.push_back(0);
+	lista.push_back(2);
+	OperadorProyeccion proyeccion("proyeccion.bin",gestor,lista);
+	
+	OperadorUnion unione("union.bin",gestor,gestor2);
+	
+	GestorAA gestor3("proyeccion.bin");
+	OperadorProductoCartesiano("producto.bin",gestor,gestor3);
 	return 0;
 }

@@ -146,7 +146,8 @@ unsigned Registro::hidratar(const char* buffer, unsigned int size){
 			unsigned contador = 0;
 			it_campos = campos.begin();
 			for (; it_campos!= campos.end();++it_campos){
-					contador+=(*it_campos).formato.longitud;
+					if(!(*it_campos).bloqueado)
+						contador+=(*it_campos).formato.longitud;
 			}
 			return contador;
 	}
@@ -253,18 +254,22 @@ std::string Registro::getFormato(){
 	
 	std::stringstream buffer;
   std::string::const_iterator it = formato.begin();
- 
+	std::cout<<formato<<std::endl;
 	std::vector<std::string> auxiliar;
 	 for(;it != formato.end();it++){ 
     if ((*it) != ',')
       buffer<<*it;
     else{
+			
       auxiliar.push_back(buffer.str());
+			std::cout<<"buffer.str()"<<buffer.str()<<std::endl;
+			buffer.str("");
+			std::cout<<"buffer.str()"<<buffer.str()<<std::endl;
 			buffer.clear();
     }
   }
   
-  buffer.clear();
+  buffer.str("");
   for(unsigned i = 0;i < auxiliar.size(); i++){
 			if (!campos[i].bloqueado){
 					buffer<<auxiliar[i];
@@ -276,6 +281,16 @@ std::string Registro::getFormato(){
 	//Borro la coma
 	unsigned pos = salida.find_last_of(",");
 	salida.erase(pos,1);
-  
+  std::cout<<"Formato "<<salida<<std::endl;
 	return salida;
+}
+
+void Registro::suma(Registro& reg1, Registro& reg2){
+	std::string serializado1;
+	std::string serializado2;
+	std::string serializado3;
+	reg1.serializar(serializado1);
+	reg2.serializar(serializado2);
+	serializado3 = serializado1+serializado2;
+	this->hidratar(serializado3.c_str(),serializado3.size());
 }

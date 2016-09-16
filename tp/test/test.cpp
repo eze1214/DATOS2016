@@ -7,6 +7,35 @@
 #include <iostream>
 #include "../condicion.h"
 
+TEST(Registro, suma){
+	Registro registro1("i1,i1");
+	Registro registro2("i2,i2");
+	char a = 5;
+	char b = 6;
+	short c = 20;
+	short d = 20;
+	registro1.writeCampo((char*)&a,sizeof(char),0);
+	registro1.writeCampo((char*)&b,sizeof(char),1);
+
+	registro2.writeCampo((char*)&c,sizeof(int),0);
+	registro2.writeCampo((char*)&d,sizeof(int),1);
+
+	Registro registro3("i1,i1,i2,i2");
+	registro3.suma(registro1,registro2);
+
+	char buffer[6];
+
+	memcpy(buffer,(char*)&a,sizeof(char));
+	memcpy(buffer+1,(char*)&b,sizeof(char));
+	memcpy(buffer+2,(char*)&c,sizeof(short));
+	memcpy(buffer+4,(char*)&d,sizeof(short));
+	
+	std::string serializado;
+	registro3.serializar(serializado);
+	
+	EXPECT_EQ(*buffer,*serializado.c_str());
+}
+
 TEST(Registro, serializarEHidratar){
 	Registro registro("sL");
 	char mensaje[256]; 

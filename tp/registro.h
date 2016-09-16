@@ -78,6 +78,8 @@ public:
 	std::string getString() const;
 	
 	std::string getFormato();
+	
+	void suma(Registro & reg1,Registro & reg2);
 };
 
 #endif // REGISTRO_H
