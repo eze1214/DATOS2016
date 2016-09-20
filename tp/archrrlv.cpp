@@ -1,6 +1,7 @@
 #include "archrrlv.h"
 #include "registro.h"
 #include <cstdio>
+#include <cstdlib>
 
 ArchRRLV::ArchRRLV(std::string filename, std::string formato){
 	this->filename = filename;
@@ -12,6 +13,12 @@ ArchRRLV::ArchRRLV(std::string filename, std::string formato){
 	crearArchivo(filename,"wb+");
 }
 
+//TODO revizar
+/*Ahora esta todo encapsulado en la clase desriptores
+ * Falta crear el comportamiento de cuando se agrega
+ * un registro que busque en la lista de espacio libre cual es la 
+ * mas conveniente.
+ */
 ArchRRLV::ArchRRLV(std::string filename){
 	this->filename = filename;
 	this->puntero = 0;
@@ -50,24 +57,20 @@ void ArchRRLV::crearArchivo(std::string nombreArchivo,std::string configuracion)
 	if (archivo != NULL) std::cout<<"archivo creado correctamente"<<std::endl;
 	fwrite((char*)&formato.c_str(),formato.size(),1,archivo);
 	fwrite(&fin,sizeof(char),1,archivo);
-	bool esRegistro = false;
-	fwrite((char*)esRegistro,sizeof(bool),1,archivo);
-	unsigned size = descriptor.descriptorSize();
-	char * buffer = new char[size];
 	
-	descriptor.proximo = formato.size() + size + sizeof(char) + sizeof(bool);
-	descriptor.RegSize = 0;
-	descriptor.serializar(buffer,size);
+	std::string serializado;
+	descriptor.serializar(serializado);
 	
-	fwrite((char *)buffer,size,1,archivo);
-	delete [] buffer;
+	fwrite(serializado.c_str(),serializado.size(),1,archivo);
+	
 	fclose (archivo);
 }
 
 void ArchRRLV::addRegistro(Registro & registro){
 	std::string serializado;
-	registro.serializar(serializado);	
-	grabarRegistro(serializado);
+	DescriptorRegistro descriptor(registro);
+	descriptor.serializar(serializado);
+	this->grabarRegistro(serializado);
 }
 
 void ArchRRLV::readDescriptor(){
@@ -75,33 +78,56 @@ void ArchRRLV::readDescriptor(){
 	fseek(archivo,formato.size+1);
 	
 }
+
+/*Mueve el cursor hasta el espacio libre
+ * 
+ */
 void ArchRRLV::buscarEspacioLibre(FILE * archivo){
 	readDescriptor();	
 }
+
+/*TODO hay que programar correctamente el comportamiento 
+ *de la busqueda de nodos libres.
+ * Chequear por todos lados los size ahora estan encapsulados
+ * en los descriptores.
+ * 
+ * Falta en ambas clases en esta y en la de registros en bloque 
+ * que se agregue un campo ID en esta se maneja mediante el 
+ * offset y en la otra clave automática.
+ */
 void ArchRRLV::grabarRegistro(const std::string & registro){
 	FILE *archivo;
 	archivo = fopen (filename.data(),"r+b");
-	buscarEspacioLibre(archivo);
-	int size = registro.size();
-	fwrite((char*)&size,1,sizeof(int),archivo);
-	fwrite (registro.c_str(),1,registro.size(),archivo);
-	fclose(archivo);
+	buscarEspacioLibre(archivo);//TODO terminar capas conviene utilizar un fseek ftell
+	fwrite(registro.c_str(),registro.size(),1,archivo);
 }
 
 
+/*Presupongo que bufferizo el descriptor de espacio libre
+ */
 Registro ArchRRLV::readRegistro(){
-		//TODO Poner la logica para no leer el bloque de espacios libre
+	//TODO Poner la logica para no leer el bloque de espacios libre
 	FILE *archivo;
 	archivo = fopen (filename.data(),"rb");	
-	fseek(archivo,puntero,SEEK_CUR);
-	int size=0;
-	puntero += fread((char*)&size,sizeof(int),1,archivo);
-	char * buffer = new char[size];
-	//TODO falta controlar el fin de archivo;
-	puntero += fread((char*)buffer,size,1,archivo);
-	Registro registro(this->formato);
-	registro.serializar(buffer,size);
-	delete buffer[];
+	bool esRegistro;
+	bool terminar = false;
+	Registro registro(formato);
+	while(!terminar){
+		fread((char*)&esRegistro,sizeof(bool),1,archivo);
+		if (esRegistro) {
+			terminar = true;
+			std::string serializado;
+			char leido;
+			fread(&leido,sizeof(leido),1,archivo);
+			while(leido!='\n'){
+					serializado.append(&leido,sizeof(char));
+					fread(&leido,sizeof(leido),1,archivo);
+			}
+			registro.hidratar(serializado.c_str(),serializado.size());
+		} else{
+			fseek(archivo,descriptor.descriptorSize(),SEEK_CUR);
+		}
+	}
 	fclose(archivo);
 	return registro;
 }
