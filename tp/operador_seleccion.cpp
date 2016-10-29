@@ -15,8 +15,6 @@ OperadorSeleccion::OperadorSeleccion(std::string filename, GestorAA& gestor, Con
 				Registro registro(gestor.getFormato());
 				registro = bloque.getRegistro(j);
 				if (condicion.evaluar(registro)){
-					std::cout<<"condicion verdadera "<<"bloque"<<i+1<<" registro"<<j<<std::endl;
-					registro.print();
 					nuevo.insert(registro);}
 		}
 	}

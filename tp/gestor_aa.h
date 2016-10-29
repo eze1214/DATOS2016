@@ -2,11 +2,13 @@
 #define GESTORAA_H
 #include "arch_block_rrlv.h"
 #include "bloque.h"
+#include "registro.h"
 class GestorAA{
 private:
 	ArchBlockRRLV archivo;
 public:
 
+bool find(Registro & registro);
 GestorAA(std::string filename);
 void exportar(std::string csv);
 GestorAA(std::string  nombre, unsigned short tamBlock,

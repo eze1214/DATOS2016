@@ -4,6 +4,20 @@
 #include "bloque.h"
 GestorAA::GestorAA(std::string filename):archivo(filename){}
 
+bool GestorAA::find(Registro & registroComparar){
+	bool find = false;
+	std::vector <unsigned short> bloquesAProcesar = this->getNumBloquesOcupados();
+	for (unsigned i = 0; i< bloquesAProcesar.size() and !find; ++i){
+		Bloque bloque = this->getBloque(bloquesAProcesar[i]);
+		for(unsigned j = 0; j<bloque.cantRegistros() and !find; j++){
+				Registro registro(this->getFormato());
+				registro = bloque.getRegistro(j);
+				if (registroComparar.equals(registro))
+					return find = true;
+		}
+	}
+	return find;
+}
 unsigned short GestorAA::getTamBloque(){
 		return archivo.getTamBloque();
 }

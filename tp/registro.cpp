@@ -3,6 +3,18 @@
 #include "parser_formato.h"
 #include <iostream>
 #include <sstream>
+
+bool Registro::equals(Registro & registro)  {
+	it_campos = campos.begin();
+	bool equal =  true;
+	for(unsigned i = 0; i < campos.size(); i++){
+		std::cout<<campos[i].value<<" "<<registro.getCampo(i).value<<std::endl;
+		if (campos[i].value != registro.getCampo(i).value)
+			equal = false; 
+	}
+	return equal;
+}
+
 Registro::Registro(const std::string & formato):formato(formato){
 		ParserFormato parser(formato);
 		formatos = parser.getFormatos();
@@ -259,13 +271,10 @@ std::string Registro::getFormato(){
 	 for(;it != formato.end();it++){ 
     if ((*it) != ',')
       buffer<<*it;
-    else{
-			
-      auxiliar.push_back(buffer.str());
-			std::cout<<"buffer.str()"<<buffer.str()<<std::endl;
-			buffer.str("");
-			std::cout<<"buffer.str()"<<buffer.str()<<std::endl;
-			buffer.clear();
+    else{		
+    	auxiliar.push_back(buffer.str());
+		buffer.str("");
+		buffer.clear();
     }
   }
   

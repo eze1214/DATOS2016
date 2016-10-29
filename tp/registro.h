@@ -35,6 +35,7 @@ class Registro{
 
 public:
 	
+	bool equals(Registro & registro);
 	/*Se utiliza para bloquear campos que no serán persistidos
 	 * 
 	 */

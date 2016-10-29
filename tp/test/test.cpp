@@ -7,6 +7,85 @@
 #include <iostream>
 #include "../condicion.h"
 
+TEST(Registro, longitudVariable){
+	Registro registro("i2,sD,i2");
+	short a = 5;
+	char cadena [] = "holanda";
+	short b =20;
+	registro.writeCampo((char*)&a,sizeof(short),0);
+	registro.writeCampo((char*)&cadena,sizeof(cadena),1);
+	registro.writeCampo((char*)&b,sizeof(short),2);
+	std::string serializado;
+	registro.serializar(serializado);
+	std::string buffer;
+	buffer.insert(0,(char*)&a,sizeof(short));
+	buffer.insert(2,cadena,8);
+	buffer.insert(10,(char*)&b,2);
+	EXPECT_EQ(*buffer.c_str(),*serializado.c_str());	
+}
+
+TEST(Registro, longitudFija){
+	Registro registro("sL");
+	char cadena [] = "holanda";
+	registro.writeCampo((char*)&cadena,sizeof(cadena),0);
+	std::string serializado;
+	registro.serializar(serializado);
+	std::string buffer;
+	char a = 7;
+	buffer.insert(0,(char*)&a,sizeof(char));
+	buffer.insert(1,cadena,7);
+	EXPECT_EQ(*buffer.c_str(),*serializado.c_str());
+	
+}
+
+TEST(Registro, notEqualBorde){
+	Registro registro1("i1,i1");
+	Registro registro2("i1,i1");
+	char a = 5;
+	char b = 6;
+	char c = 5;
+	char d = 20;
+	registro1.writeCampo((char*)&a,sizeof(char),0);
+	registro1.writeCampo((char*)&b,sizeof(char),1);
+
+	registro2.writeCampo((char*)&c,sizeof(char),0);
+	registro2.writeCampo((char*)&d,sizeof(char),1);
+
+	EXPECT_EQ(false,registro1.equals(registro2));
+}
+
+TEST(Registro, notEqual){
+	Registro registro1("i1,i1");
+	Registro registro2("i1,i1");
+	char a = 5;
+	char b = 6;
+	char c = 20;
+	char d = 20;
+	registro1.writeCampo((char*)&a,sizeof(char),0);
+	registro1.writeCampo((char*)&b,sizeof(char),1);
+
+	registro2.writeCampo((char*)&c,sizeof(char),0);
+	registro2.writeCampo((char*)&d,sizeof(char),1);
+
+	EXPECT_EQ(false,registro1.equals(registro2));
+}
+
+TEST(Registro, Equal){
+	Registro registro1("i1,i1");
+	Registro registro2("i1,i1");
+	char a = 5;
+	char b = 6;
+	char c = 5;
+	char d = 6;
+	registro1.writeCampo((char*)&a,sizeof(char),0);
+	registro1.writeCampo((char*)&b,sizeof(char),1);
+
+	registro2.writeCampo((char*)&c,sizeof(char),0);
+	registro2.writeCampo((char*)&d,sizeof(char),1);
+
+	EXPECT_EQ(true,registro1.equals(registro2));
+}
+
 TEST(Registro, suma){
 	Registro registro1("i1,i1");
 	Registro registro2("i2,i2");
@@ -368,36 +447,7 @@ TEST(condicion,condicionVerdaderaVariosCampos){
 	EXPECT_EQ(condicion.evaluar(registro),true);
 }
 
-TEST(Registro, longitudVariable){
-	Registro registro("i2,sD,i2");
-	short a = 5;
-	char cadena [] = "holanda";
-	short b =20;
-	registro.writeCampo((char*)&a,sizeof(short),0);
-	registro.writeCampo((char*)&cadena,sizeof(cadena),1);
-	registro.writeCampo((char*)&b,sizeof(short),2);
-	std::string serializado;
-	registro.serializar(serializado);
-	std::string buffer;
-	buffer.insert(0,(char*)&a,sizeof(short));
-	buffer.insert(2,cadena,8);
-	buffer.insert(10,(char*)&b,2);
-	EXPECT_EQ(*buffer.c_str(),*serializado.c_str());	
-}
 
-TEST(Registro, longitudFija){
-	Registro registro("sL");
-	char cadena [] = "holanda";
-	registro.writeCampo((char*)&cadena,sizeof(cadena),0);
-	std::string serializado;
-	registro.serializar(serializado);
-	std::string buffer;
-	char a = 7;
-	buffer.insert(0,(char*)&a,sizeof(char));
-	buffer.insert(1,cadena,7);
-	EXPECT_EQ(*buffer.c_str(),*serializado.c_str());
-	
-}
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest( &argc, argv );
     return RUN_ALL_TESTS();

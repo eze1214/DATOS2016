@@ -21,8 +21,6 @@ OperadorProductoCartesiano::OperadorProductoCartesiano(std::string filename, Ges
 						registro2 = bloque2.getRegistro(l);
 						Registro registro3(gestor.getFormato()+","+gestor2.getFormato());
 						registro3.suma(registro1,registro2);
-						registro3.print();
-						std::cout<<std::endl;
 						nuevo.insert(registro3);
 					}
 				}
