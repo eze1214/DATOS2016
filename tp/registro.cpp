@@ -290,7 +290,6 @@ std::string Registro::getFormato(){
 	//Borro la coma
 	unsigned pos = salida.find_last_of(",");
 	salida.erase(pos,1);
-  std::cout<<"Formato "<<salida<<std::endl;
 	return salida;
 }
 

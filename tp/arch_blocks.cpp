@@ -93,10 +93,7 @@ void ArchBlocks::readHeader(){
 ArchBlocks::ArchBlocks(std::string nombreArchivo){
 	this->nombreArchivo = nombreArchivo; 
 	if (existeArchivo(nombreArchivo)){
-		std::cout<<"Abriendo el archivo"<<std::endl;
 		readHeader();
-		std::cout<<"Tam bloque "<<tamanioBloque<<std::endl;
-		std::cout<<"Formato "<<formato<<std::endl;
 	}
 	else {
 		std::cout<<"El archivo no existe"<<std::endl;
