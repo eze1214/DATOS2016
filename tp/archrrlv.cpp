@@ -3,7 +3,7 @@
 #include <cstdio>
 #include <cstdlib>
 
-ArchRRLV::ArchRRLV(std::string filename, std::string formato){
+ArchRRLV::ArchRRLV(std::string filename, std::string formato):abierto(true){
 	this->filename = filename;
 	this->formato = formato;
 	this->puntero = 0;
@@ -13,6 +13,13 @@ ArchRRLV::ArchRRLV(std::string filename, std::string formato){
 	crearArchivo(filename,"wb+");
 }
 
+ArchRRLV::~ArchRRLV(){
+	if (abierto){
+		std::cout<<"se ejecuta el destructor y se cierra el archivo"<<std::endl;
+		fclose(archivo);
+		abierto = false;
+	}
+}
 std::string ArchRRLV::getFormato(){
 	return formato;
 }
@@ -22,7 +29,6 @@ void ArchRRLV::crearArchivo(std::string nombreArchivo,std::string configuracion)
 	if (archivo != NULL) std::cout<<"archivo creado correctamente"<<std::endl;
 	
 	grabarFormato();	
-	fclose (archivo);
 }
 //TODO revizar
 /*Ahora esta todo encapsulado en la clase desriptores
@@ -30,7 +36,7 @@ void ArchRRLV::crearArchivo(std::string nombreArchivo,std::string configuracion)
  * un registro que busque en la lista de espacio libre cual es la 
  * mas conveniente.
  */
-ArchRRLV::ArchRRLV(std::string filename){
+ArchRRLV::ArchRRLV(std::string filename):abierto(true){
 	this->filename = filename;
 	
 	archivo = fopen(filename.data(),"rb+");
@@ -38,8 +44,18 @@ ArchRRLV::ArchRRLV(std::string filename){
 	leerFormato();
 
 	puntero = ftell(archivo);
-	fclose(archivo);
+	std::cout<<"Ftell constructor "<<ftell(archivo)<<std::endl;
+
 }
+
+void ArchRRLV::close(){
+		if (abierto){
+			std::cout<<"Se cierra el archivo"<<std::endl;
+			abierto = false;
+			fclose(archivo);
+		}
+	}
+
 bool ArchRRLV::existeArchivo(std::string nombreArchivo){
 	bool existencia;
 	FILE *archivo;
@@ -62,6 +78,8 @@ void ArchRRLV::leerFormato(){
 	if (outRead<=0) std::cout<<"Error de lectura en leerFormato"<<std::endl;
 	formato.clear();
 	formato.append(buffer,size);
+	std::cout<<"Ftell leerFormato "<<ftell(archivo)<<std::endl;
+
 	delete[] buffer;
 }
 
@@ -80,6 +98,9 @@ void ArchRRLV::grabarDescriptor(){
 	fwrite(serializado.c_str(),serializado.size(),1,archivo);
 }
 
+bool ArchRRLV::eof(){
+	return feof(archivo);
+}
 void ArchRRLV::leerDescriptor(unsigned offset){
 	unsigned char size;
 	fread(&size, sizeof(char), 1, archivo);
@@ -92,6 +113,7 @@ void ArchRRLV::leerDescriptor(unsigned offset){
 
 void ArchRRLV::add(Registro & registro){
 	std::string serializado;
+	std::cout<<"Agregando"<<std::endl;
 	registro.serializar(serializado);
 	this->grabarRegistro(serializado);
 }
@@ -101,13 +123,11 @@ void ArchRRLV::buscarEspacioLibre(){
 }
 
 void ArchRRLV::grabarRegistro( std::string registro){
-	archivo = fopen (filename.data(),"r+b");
 	buscarEspacioLibre();
 	size_t size = registro.size();
 	int salida = fwrite((char * ) & size, sizeof(size_t) ,1,archivo);
 	salida = fwrite(registro.c_str(),size,1,archivo);
 	if (salida <= 0) std::cout<<"error"<<std::endl;
-	fclose (archivo);
 }
 
 
@@ -117,10 +137,13 @@ void ArchRRLV::gotoPuntero(){
 
 unsigned ArchRRLV::read(Registro & registro){
 	size_t size;
-	archivo = fopen (filename.data(),"rb");
-	gotoPuntero();
+	std::cout<<"Leyendo"<<std::endl;
+	std::cout<<"ftell"<<ftell(archivo)<<std::endl;
 	do{
-		fread((char * ) &size, sizeof(size_t), 1, archivo);
+		if(fread((char * ) &size, sizeof(size_t), 1, archivo)<=0)
+			std::cout<<"error"<<std::endl;
+		std::cout<<"Size leido"<<size<<std::endl;
+		std::cout<<"ftell"<<ftell(archivo)<<std::endl;
 		if (size==0 and !feof(archivo)){
 			fseek(archivo,-(sizeof(unsigned)-1),SEEK_CUR);
 		}
@@ -130,8 +153,9 @@ unsigned ArchRRLV::read(Registro & registro){
 		char * buffer = new char [size];
 		fread(buffer,size,1,archivo);
 		registro.hidratar(buffer,size);
+		std::cout<<"ftell"<<ftell(archivo)<<std::endl;
 		delete [] buffer;
 	}
-	fclose(archivo);
+	//puntero = ftell(archivo);
 	return size;
 }

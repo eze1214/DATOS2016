@@ -477,6 +477,7 @@ TEST(condicion,condicionVerdaderaVariosCampos){
 
 TEST(ARCHRRLV,addAndReadRegistro){
 	ArchRRLV arch("prueba.bin","i1,i2,i4");
+	std::cout<<"Se termino de crear el archivo 1"<<std::endl;
 	char a = 5;
 	short int b = 10;
 	int c = 20;
@@ -489,6 +490,7 @@ TEST(ARCHRRLV,addAndReadRegistro){
 
 	ArchRRLV arch2("prueba.bin");
 	Registro registro2(arch.getFormato());
+	arch.close();
 	arch2.read(registro2);
 	Campo campo;
 	campo = registro2.getCampo(0);

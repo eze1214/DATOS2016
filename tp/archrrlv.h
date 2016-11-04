@@ -73,7 +73,7 @@ private:
 	DescriptorEspacioLibre descriptor;
 	std::string filename;
 	std::string formato;
-	
+	bool abierto;
 	bool existeArchivo(std::string nombreArchivo);
 	void crearArchivo(std::string filename, std::string configuracion);
 	unsigned puntero; //Contiene la posicion actual. Usado para lecturas secuenciales
@@ -85,7 +85,8 @@ private:
 	void buscarEspacioLibre();
 	void gotoPuntero();
 public:
-
+	void close();
+	bool eof();
 	std::string getFormato();
 	/*Constructor para crear un archivo nuevo*/
 	ArchRRLV(std::string filename);
@@ -93,6 +94,7 @@ public:
 	/*Constructor para abrir un archivo*/
 	ArchRRLV(std::string filename,std::string formato);
 
+	~ArchRRLV();
 	/*Lee un registro de forma secuencial
 	 */
 	unsigned read(Registro & registro);
