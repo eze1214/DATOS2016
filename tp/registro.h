@@ -2,8 +2,27 @@
 #define REGISTRO_H
 #include "parser_formato.h"
 #include <vector>
+#include <cstring>
 #include <iostream>
-struct Campo{
+//struct Campo{
+//		std::string value;
+//		Formato formato;
+//		bool bloqueado;
+//};
+
+class Campo{
+private:
+
+public:
+	void get(int & param) {
+		memcpy((char* )& param, value.c_str(), sizeof(int));
+	}
+	void get(char & param) {
+		memcpy((char* )& param, value.c_str(),sizeof(char));
+	}
+	void get(short & param) {
+		memcpy((char* )& param, value.c_str(), sizeof(short));
+	}
 		std::string value;
 		Formato formato;
 		bool bloqueado;

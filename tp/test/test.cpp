@@ -6,6 +6,34 @@
 #include "../bytemap.h"
 #include <iostream>
 #include "../condicion.h"
+#include "../archrrlv.h"
+
+TEST(Campo,getCampo){
+	ArchRRLV arch("prueba.bin","i1,i2,i4");
+	char a = 5;
+	short int b = 10;
+	int c = 20;
+	Registro registro("i1,i2,i4");
+	registro.writeCampo((char*)&a,sizeof(a),0);
+	registro.writeCampo((char*)&b,sizeof(b),1);
+	registro.writeCampo((char*)&c,sizeof(c),2);
+	Campo campo;
+	campo = registro.getCampo(0);
+	char A; campo.get(A);
+	campo = registro.getCampo(1);
+	short int B; campo.get(B);
+	campo = registro.getCampo(2);
+	int C; campo.get(C);
+	EXPECT_EQ(A,5);
+	EXPECT_EQ(B,10);
+	EXPECT_EQ(C,20);
+}
+TEST(ARCHRRLV,newFileAndRead){
+	ArchRRLV arch("prueba.bin","i1,i2,i4");
+	ArchRRLV arch2("prueba.bin");
+	std::string formato = arch2.getFormato();
+	EXPECT_EQ(formato,"i1,i2,i4");
+}
 
 TEST(Registro, longitudVariable){
 	Registro registro("i2,sD,i2");
@@ -447,6 +475,33 @@ TEST(condicion,condicionVerdaderaVariosCampos){
 	EXPECT_EQ(condicion.evaluar(registro),true);
 }
 
+TEST(ARCHRRLV,addAndReadRegistro){
+	ArchRRLV arch("prueba.bin","i1,i2,i4");
+	char a = 5;
+	short int b = 10;
+	int c = 20;
+	Registro registro("i1,i2,i4");
+	registro.writeCampo((char*)&a,sizeof(a),0);
+	registro.writeCampo((char*)&b,sizeof(b),1);
+	registro.writeCampo((char*)&c,sizeof(c),2);
+	
+	arch.add(registro);
+
+	ArchRRLV arch2("prueba.bin");
+	Registro registro2(arch.getFormato());
+	arch2.read(registro2);
+	Campo campo;
+	campo = registro2.getCampo(0);
+	char A; campo.get(A);
+	campo = registro2.getCampo(1);
+	short int B; campo.get(B);
+	campo = registro2.getCampo(2);
+	int C; campo.get(C);
+	EXPECT_EQ(A,5);
+	EXPECT_EQ(B,10);
+	EXPECT_EQ(C,20);
+	EXPECT_EQ(1,1);
+}
 
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest( &argc, argv );

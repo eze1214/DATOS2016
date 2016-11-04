@@ -14,8 +14,9 @@
 #include "operador_proyeccion.h"
 #include "operador_union.h"
 #include "operador_producto_cartesiano.h"
-int main(int argc, char * argv[]){
-	GestorAA gestor5("producto.bin");
+#include "archrrlv.h"
+void pruebas1(){
+GestorAA gestor5("producto.bin");
 	gestor5.exportar("productoExportado.csv");
 						   ArchBlockRRLV archivo("prueba.bin",512,"i2,i2,d,dt");
 						 	Registro registro("i2,i2,d,dt");
@@ -58,5 +59,10 @@ int main(int argc, char * argv[]){
 	
 	GestorAA gestor3("proyeccion.bin");
 	OperadorProductoCartesiano("producto.bin",gestor,gestor3);
+
+}
+
+int main(int argc, char * argv[]){
+	ArchRRLV archivo("RRLV.bin","i1,i2");
 	return 0;
 }

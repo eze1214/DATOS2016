@@ -79,6 +79,7 @@ void Registro::bloquearTodosCampos(){
 			return campos[numero];
 	}
 	
+	//Este aparentemente no se usa mas
  unsigned int Registro::serializar(char* buffer, unsigned int size){
  	it_campos = campos.begin();
  	unsigned pos = 0;
