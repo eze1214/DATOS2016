@@ -93,6 +93,7 @@ private:
 
 	//Devuelve 0 en el caso de que
 	unsigned getLibre(unsigned size);
+	void borrarLibre(unsigned linea);
 public:
 	void close();
 	bool eof();

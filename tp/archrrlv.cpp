@@ -165,7 +165,28 @@ void ArchRRLV::gotoPuntero(){
 }
 
 void ArchRRLV::addLibre(unsigned id, size_t size){
-	fprintf(archivoRegistrosLibres,"%i %i\n",id,size);
+	fprintf(archivoRegistrosLibres,"%u %u\n",id,size);
+}
+
+//FIXME solucionar el tema del borrado que pued dejar algun caracter
+void ArchRRLV::borrarLibre(unsigned linea){
+	rewind(archivoRegistrosLibres);
+	bool terminar = false;
+	unsigned idLeido=0;
+	size_t size=0;
+	int salida=0;
+	unsigned contador = 0;
+	while (!terminar){
+		if (contador == linea){
+			fprintf(archivoRegistrosLibres,"%u %u\n",salida,salida);
+			terminar = true;
+		}else{
+		contador++;
+		if(fscanf(archivoRegistrosLibres,"%u %u",&idLeido,&size)<=0)
+			std::cout<<"Error borrarLibre";
+		}
+	}
+
 }
 
 unsigned ArchRRLV::getLibre(unsigned sizeNecesario){
@@ -175,6 +196,7 @@ unsigned ArchRRLV::getLibre(unsigned sizeNecesario){
 	unsigned idSeleccionado=0; 
 	size_t size=0;
 	unsigned salida;
+	unsigned linea = 0;
 	while (!terminar){
 		salida = fscanf(archivoRegistrosLibres,"%u %u",&idLeido,&size);
 		if (feof(archivoRegistrosLibres) or salida <= 0 or idLeido == 0){
@@ -182,9 +204,12 @@ unsigned ArchRRLV::getLibre(unsigned sizeNecesario){
 		} else{
 			std::cout<<"size "<<size<<"size necesario "<<sizeNecesario<<std::endl;
 			if (size >= sizeNecesario){
+				std::cout<<"linea"<<linea<<std::endl;
 				idSeleccionado = idLeido;
+				borrarLibre(linea);
 			}
 		}
+		linea++;
 	}
 	return idSeleccionado;
 }
