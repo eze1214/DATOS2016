@@ -29,10 +29,11 @@ TEST(Campo,getCampo){
 	EXPECT_EQ(C,20);
 }
 TEST(ARCHRRLV,newFileAndRead){
-	ArchRRLV arch("prueba.bin","i1,i2,i4");
-	ArchRRLV arch2("prueba.bin");
+	ArchRRLV arch("prueba.bin2","i1,i2,i4");
+	arch.close();
+	ArchRRLV arch2("prueba.bin2");
 	std::string formato = arch2.getFormato();
-	EXPECT_EQ(formato,"i1,i2,i4");
+	EXPECT_EQ(formato,"i4,i1,i2,i4");
 }
 
 TEST(Registro, longitudVariable){
@@ -485,26 +486,147 @@ TEST(ARCHRRLV,addAndReadRegistro){
 	registro.writeCampo((char*)&a,sizeof(a),0);
 	registro.writeCampo((char*)&b,sizeof(b),1);
 	registro.writeCampo((char*)&c,sizeof(c),2);
+	std::cout<<"yes"<<std::endl;
+	arch.add(registro);
+	std::cout<<"yes"<<std::endl;
+	std::string formato = arch.getFormato();
+	arch.close();
+	ArchRRLV arch2("prueba.bin");
+	Registro registro2(formato);
+	arch2.read(registro2);
+	Campo campo;
+	campo = registro2.getCampo(1);
+	char A; campo.get(A);
+	campo = registro2.getCampo(2);
+	short int B; campo.get(B);
+	campo = registro2.getCampo(3);
+	int C; campo.get(C);
+	EXPECT_EQ(A,5);
+	EXPECT_EQ(B,10);
+	EXPECT_EQ(C,20);
+}
+
+
+TEST(ARCHRRLV,getRegistroXId){
+	ArchRRLV arch("prueba.bin","i1,i2,i4");
+	std::cout<<"Se termino de crear el archivo 1"<<std::endl;
+	char a = 5;
+	short int b = 10;
+	int c = 20;
+	Registro registro("i1,i2,i4");
+	registro.writeCampo((char*)&a,sizeof(a),0);
+	registro.writeCampo((char*)&b,sizeof(b),1);
+	registro.writeCampo((char*)&c,sizeof(c),2);
 	
+	arch.add(registro);
+	c = 50;
+	registro.writeCampo((char*)&c,sizeof(c),2);
 	arch.add(registro);
 
 	ArchRRLV arch2("prueba.bin");
 	Registro registro2(arch.getFormato());
 	arch.close();
-	arch2.read(registro2);
+	arch2.read(registro2,15);
 	Campo campo;
-	campo = registro2.getCampo(0);
-	char A; campo.get(A);
 	campo = registro2.getCampo(1);
-	short int B; campo.get(B);
+	char A; campo.get(A);
 	campo = registro2.getCampo(2);
+	short int B; campo.get(B);
+	campo = registro2.getCampo(3);
 	int C; campo.get(C);
 	EXPECT_EQ(A,5);
 	EXPECT_EQ(B,10);
 	EXPECT_EQ(C,20);
-	EXPECT_EQ(1,1);
 }
 
+TEST(ARCHRRLV,getRegistroXId2){
+	ArchRRLV arch("prueba.bin","i1,i2,i4");
+	std::cout<<"Se termino de crear el archivo 1"<<std::endl;
+	char a = 5;
+	short int b = 10;
+	int c = 20;
+	Registro registro("i1,i2,i4");
+	registro.writeCampo((char*)&a,sizeof(a),0);
+	registro.writeCampo((char*)&b,sizeof(b),1);
+	registro.writeCampo((char*)&c,sizeof(c),2);
+	
+	arch.add(registro);
+	c = 50;
+	registro.writeCampo((char*)&c,sizeof(c),2);
+	arch.add(registro);
+
+	ArchRRLV arch2("prueba.bin");
+	Registro registro2(arch.getFormato());
+	arch.close();
+	arch2.read(registro2,30);
+	Campo campo;
+	campo = registro2.getCampo(0);
+	int id; campo.get(id);
+	campo = registro2.getCampo(1);
+	char A; campo.get(A);
+	campo = registro2.getCampo(2);
+	short int B; campo.get(B);
+	campo = registro2.getCampo(3);
+	int C; campo.get(C);
+	arch2.del(15);
+	arch2.del(30);
+	EXPECT_EQ(id,30);
+	EXPECT_EQ(A,5);
+	EXPECT_EQ(B,10);
+	EXPECT_EQ(C,50);
+	//arch2.del(30);
+}
+
+TEST(ARCHRRLV,delAndRead){
+	ArchRRLV arch("prueba.bin","i1,i2,i4");
+	std::cout<<"Se termino de crear el archivo 1"<<std::endl;
+	char a = 5;
+	short int b = 10;
+	int c = 20;
+	Registro registro("i1,i2,i4");
+	registro.writeCampo((char*)&a,sizeof(a),0);
+	registro.writeCampo((char*)&b,sizeof(b),1);
+	registro.writeCampo((char*)&c,sizeof(c),2);
+	
+	arch.add(registro);
+	c = 50;
+	registro.writeCampo((char*)&c,sizeof(c),2);
+	arch.add(registro);
+	arch.add(registro);
+	ArchRRLV arch2("prueba.bin");
+	std::string formato = arch.getFormato();
+	arch.del(30);
+	arch.close();
+
+	Registro registro2(formato);
+	c = 19;
+	registro.writeCampo((char*)&a,sizeof(a),0);
+	registro.writeCampo((char*)&b,sizeof(b),1);
+	registro.writeCampo((char*)&c,sizeof(c),2);
+	std::cout<<"Agregado arch2"<<std::endl;
+	arch2.add(registro);
+	arch2.read(registro2,30);
+	
+	Campo campo;
+	campo = registro2.getCampo(0);
+	int id; campo.get(id);
+	campo = registro2.getCampo(1);
+	char A; campo.get(A);
+	campo = registro2.getCampo(2);
+	short int B; campo.get(B);
+	campo = registro2.getCampo(3);
+	int C; campo.get(C);
+
+	EXPECT_EQ(id,30);
+	EXPECT_EQ(A,5);
+	EXPECT_EQ(B,10);
+	EXPECT_EQ(C,19);
+	
+
+	
+
+	//arch2.del(30);
+}
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest( &argc, argv );
     return RUN_ALL_TESTS();

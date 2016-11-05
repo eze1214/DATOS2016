@@ -69,24 +69,34 @@ public:
 class ArchRRLV{
 private:
 	FILE * archivo;
-
+	FILE * archivoRegistrosLibres;
 	DescriptorEspacioLibre descriptor;
 	std::string filename;
+	std::string registrosLibres;
 	std::string formato;
 	bool abierto;
 	bool existeArchivo(std::string nombreArchivo);
-	void crearArchivo(std::string filename, std::string configuracion);
+	void crearArchivo(std::string configuracion);
+	void crearArchivoRegistrosLibres();
 	unsigned puntero; //Contiene la posicion actual. Usado para lecturas secuenciales
 	void grabarFormato();
 	void leerFormato();
 	void grabarDescriptor();
 	void leerDescriptor(unsigned offset);
 	void grabarRegistro(std::string registro);
-	void buscarEspacioLibre();
+	void buscarEspacioLibre(unsigned size);
 	void gotoPuntero();
+	void agregarID(std::string & registro);
+
+	//Guarda en un archivo de texto un offset
+	void addLibre(unsigned id, size_t size);
+
+	//Devuelve 0 en el caso de que
+	unsigned getLibre(unsigned size);
 public:
 	void close();
 	bool eof();
+
 	std::string getFormato();
 	/*Constructor para crear un archivo nuevo*/
 	ArchRRLV(std::string filename);
@@ -99,9 +109,11 @@ public:
 	 */
 	unsigned read(Registro & registro);
 
+	unsigned read(Registro & registro, unsigned id);
+
 	/*Elimina el registro que se encuentra en el ofset
 	*/
-	void delRegistro(unsigned offset);
+	void del(unsigned id);
 
 	/*Si es mayor que el tamaño queda cortado el registro
 	  si es menor lo rellena con 0
