@@ -1,7 +1,6 @@
 #include "operador_producto_cartesiano.h"
 #include <string>
-#include "gestor_aa.h"
-OperadorProductoCartesiano::OperadorProductoCartesiano(std::string filename, GestorAA& gestor, GestorAA& gestor2){
+OperadorProducto::OperadorProducto(std::string filename, GestorAA& gestor, GestorAA& gestor2){
 	std::string coma = ",";
 	GestorAA nuevo (filename,gestor.getTamBloque(),gestor.getFormato() + coma + gestor2.getFormato());
 	std::vector <unsigned short> bloquesAProcesar = gestor.getNumBloquesOcupados();
@@ -24,6 +23,37 @@ OperadorProductoCartesiano::OperadorProductoCartesiano(std::string filename, Ges
 						nuevo.insert(registro3);
 					}
 				}
+		}
+	}
+}
+
+OperadorProducto::OperadorProducto(std::string filename, GestorAARRLV& gestor, GestorAARRLV& gestor2){
+	std::string coma = ",";
+	GestorAARRLV nuevo (filename,gestor.getFormato() + coma + gestor2.getFormato());
+
+	Registro registro1(gestor.getFormato());
+	Registro registro2(gestor2.getFormato());
+	
+	int salida;
+	bool terminar = false;
+
+	while(!terminar){
+		salida = gestor.read(registro1);
+		if (salida == 0) {
+			terminar = true;
+		}else{
+			int salida2;
+			bool terminar2 = false;
+			while(!terminar2){
+				salida2 = gestor.read(registro2);
+				if (salida2 == 0) {
+					terminar2 = true;
+				}else{
+					Registro registro3(gestor.getFormato()+","+gestor2.getFormato());
+					registro3.suma(registro1,registro2);
+					nuevo.write(registro3);
+				}
+			}	
 		}
 	}
 }

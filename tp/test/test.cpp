@@ -621,12 +621,34 @@ TEST(ARCHRRLV,delAndRead){
 	EXPECT_EQ(A,5);
 	EXPECT_EQ(B,10);
 	EXPECT_EQ(C,19);
-	
-
-	
-
-	//arch2.del(30);
 }
+
+TEST(ARCHRRLV,readWithEof){
+	ArchRRLV arch("prueba.bin","i1,i2,i4");
+	std::cout<<"Se termino de crear el archivo 1"<<std::endl;
+	char a = 5;
+	short int b = 10;
+	int c = 20;
+	Registro registro("i1,i2,i4");
+	registro.writeCampo((char*)&a,sizeof(a),0);
+	registro.writeCampo((char*)&b,sizeof(b),1);
+	registro.writeCampo((char*)&c,sizeof(c),2);
+
+	//Agrego 3 registros
+	arch.add(registro);
+	arch.add(registro);
+	arch.add(registro);
+	ArchRRLV arch2("prueba.bin");
+	std::string formato = arch.getFormato();
+	arch.close();
+	
+	Registro registro2(formato);
+	
+	EXPECT_EQ(arch2.read(registro2),11);
+	EXPECT_EQ(arch2.read(registro2),11);
+	EXPECT_EQ(arch2.read(registro2),11);
+	EXPECT_EQ(arch2.read(registro2),0);
+	}
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest( &argc, argv );
     return RUN_ALL_TESTS();

@@ -129,13 +129,10 @@ void ArchRRLV::add(Registro & registro){
 	std::string serializado;
 	registro.serializar(serializado);
 	this->grabarRegistro(serializado);
-	std::cout<<"termindo el add"<<std::endl;
 }
 
 void ArchRRLV::buscarEspacioLibre(unsigned size){
 	unsigned idSeleccionado = getLibre(size);
-		std::cout<<"add yes"<<std::endl;
-	std::cout<<idSeleccionado<<std::endl;
 	if (idSeleccionado == 0)
 		fseek(archivo,0,SEEK_END);
 	else
@@ -202,9 +199,7 @@ unsigned ArchRRLV::getLibre(unsigned sizeNecesario){
 		if (feof(archivoRegistrosLibres) or salida <= 0 or idLeido == 0){
 			terminar = true;
 		} else{
-			std::cout<<"size "<<size<<"size necesario "<<sizeNecesario<<std::endl;
 			if (size >= sizeNecesario){
-				std::cout<<"linea"<<linea<<std::endl;
 				idSeleccionado = idLeido;
 				borrarLibre(linea);
 			}
@@ -227,30 +222,30 @@ void ArchRRLV::del(unsigned id){
 	addLibre(id,size+sizeof(size_t));
 }
 
-unsigned ArchRRLV::read(Registro & registro, unsigned id){
+int ArchRRLV::read(Registro & registro, unsigned id){
 	fseek(archivo,id,SEEK_SET);
 	return read(registro);
 }
 
-unsigned ArchRRLV::read(Registro & registro){
-	size_t size;
+
+int ArchRRLV::read(Registro & registro){
+	size_t size; 
+	int leido;
 	do{
-		if(fread((char * ) &size, sizeof(size_t), 1, archivo)<=0)
-			std::cout<<"error al leer un archvo"<<std::endl;
-		if (size==0 and !feof(archivo)){
+		if((leido = fread((char * ) &size, sizeof(size_t), 1, archivo))<=0 and !feof(archivo))
+			std::cout<<"error al leer un archvo leido"<<leido<<std::endl;
+		if (leido > 0 and size==0 and !feof(archivo)){
 			fseek(archivo,-(sizeof(unsigned)-1),SEEK_CUR);
 		}
-	} while(size==0 and !feof(archivo));
-
-	if (size!=0) {
-		
+	} while(leido > 0 and size==0 and !feof(archivo));
+	if (size!=0 and !feof(archivo)) {
 		char * buffer = new char [size];
 		int out =fread(buffer,size,1,archivo);
 		if (out <= 0 ) std::cout<<"Error al leer "<<std::endl;
 		registro.hidratar(buffer,size);
 		delete [] buffer;
 	}
-	//puntero = ftell(archivo);
-	std::cout<<"terminado el read"<<std::endl;
-	return size;
+	if (feof(archivo)) return 0;
+		else
+		return size;
 }

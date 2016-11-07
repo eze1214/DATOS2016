@@ -107,10 +107,11 @@ public:
 
 	~ArchRRLV();
 	/*Lee un registro de forma secuencial
+	Devuelve 0 si se llegó al eof
 	 */
-	unsigned read(Registro & registro);
+	int read(Registro & registro);
 
-	unsigned read(Registro & registro, unsigned id);
+	int read(Registro & registro, unsigned id);
 
 	/*Elimina el registro que se encuentra en el ofset
 	*/

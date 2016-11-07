@@ -1,13 +1,17 @@
-#ifndef GESTORAA_H
-#define GESTORAA_H
+#ifndef GESTORAA_BLOCK_H
+#define GESTORAA_BLOCK_H
 #include "arch_block_rrlv.h"
 #include "bloque.h"
 #include "registro.h"
 class GestorAA{
 private:
+	unsigned contadorBloque;
+	unsigned contadorRegistro;
 	ArchBlockRRLV archivo;
 public:
 
+
+Registro getRegistro();
 bool find(Registro & registro);
 GestorAA(std::string filename);
 void exportar(std::string csv);
@@ -27,4 +31,4 @@ void insert(Registro registro){
 }
 };
 
-#endif // GESTORAA_H
+#endif // GESTORAA_BLOCK_H

@@ -1,8 +1,10 @@
 #include "operador_seleccion.h"
+#include <iostream>
 #include "registro.h"
 #include <vector>
+
 OperadorSeleccion::OperadorSeleccion(std::string filename, GestorAA& gestor, Condicion& condicion):
-										gestor(gestor),condicion(condicion){
+									condicion(condicion){
 										
 	GestorAA nuevo (filename,gestor.getTamBloque(),gestor.getFormato());
 	
@@ -19,3 +21,22 @@ OperadorSeleccion::OperadorSeleccion(std::string filename, GestorAA& gestor, Con
 		}
 	}
 }
+
+OperadorSeleccion::OperadorSeleccion(std::string filename, GestorAARRLV& gestor, Condicion& condicion):
+									condicion(condicion){
+										
+	GestorAARRLV nuevo (filename,gestor.getFormato());
+	Registro registro(gestor.getFormato());
+	bool terminar = false;
+	int salida;
+	while(!terminar){
+		salida = gestor.read(registro);
+		if (salida == 0) {
+			terminar = true;
+		}else{
+			if (condicion.evaluar(registro)){
+					nuevo.write(registro);}
+		}
+	}
+}
+
